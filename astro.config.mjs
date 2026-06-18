@@ -10,7 +10,7 @@ import icon from 'astro-icon'
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://jaweb.es',
+  site: 'https://jasodev.es',
   vite: {
     // @ts-ignore
     plugins: [tailwindcss()]
