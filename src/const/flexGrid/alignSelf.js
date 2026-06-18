@@ -1,0 +1,8 @@
+export const alignSelf = [
+    'self-auto',
+    'self-start',
+    'self-end',
+    'self-center',
+    'self-stretch',
+    'self-baseline',
+]

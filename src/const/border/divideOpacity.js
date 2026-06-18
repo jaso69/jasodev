@@ -1,0 +1,17 @@
+export const divideOpacity = [
+    'divide-opacity-0',
+    'divide-opacity-5',
+    'divide-opacity-10',
+    'divide-opacity-20',
+    'divide-opacity-25',
+    'divide-opacity-30',
+    'divide-opacity-40',
+    'divide-opacity-50',
+    'divide-opacity-60',
+    'divide-opacity-70',
+    'divide-opacity-75',
+    'divide-opacity-80',
+    'divide-opacity-90',
+    'divide-opacity-95',
+    'divide-opacity-100',
+]

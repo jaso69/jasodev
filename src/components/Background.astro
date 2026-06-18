@@ -1,0 +1,52 @@
+---
+import GeneratorLayout from './GeneratorLayout.astro';
+import Select from './Select.astro';
+import Preview from './Preview.astro';
+import CodeOutput from './CodeOutput.astro';
+import { color } from '../const/background/color';
+import { opacity } from '../const/background/opacity';
+import { position } from '../const/background/position';
+import { origin } from '../const/background/origin';
+import { attachment } from '../const/background/attachment';
+import { repeat } from '../const/background/repeat';
+import { size } from '../const/background/size';
+import { image } from '../const/background/image';
+import { colorStopFrom } from '../const/background/colorStopFrom';
+import { colorStopVia } from '../const/background/colorStopVia';
+import { colorStopTo } from '../const/background/colorStopTo';
+import { clip } from '../const/background/clip';
+
+const groups = [
+  { id: 'colorBackground', label: 'Color', options: color, desc: 'Color de fondo', href: 'https://tailwindcss.com/docs/background-color' },
+  { id: 'opacityBackground', label: 'Opacity', options: opacity, desc: 'Opacidad del color', href: 'https://tailwindcss.com/docs/background-opacity' },
+  { id: 'positionBackground', label: 'Position', options: position, desc: 'Posición de la imagen', href: 'https://tailwindcss.com/docs/background-position' },
+  { id: 'originBackground', label: 'Origin', options: origin, desc: 'Origen del fondo', href: 'https://tailwindcss.com/docs/background-origin' },
+  { id: 'attachment', label: 'Attachment', options: attachment, desc: 'Fijar al scroll', href: 'https://tailwindcss.com/docs/background-attachment' },
+  { id: 'repeat', label: 'Repeat', options: repeat, desc: 'Repetición', href: 'https://tailwindcss.com/docs/background-repeat' },
+  { id: 'size', label: 'Size', options: size, desc: 'Tamaño de la imagen', href: 'https://tailwindcss.com/docs/background-size' },
+  { id: 'image', label: 'Image', options: image, desc: 'Imagen de fondo', href: 'https://tailwindcss.com/docs/background-image' },
+  { id: 'colorStopFrom', label: 'Color From', options: colorStopFrom, desc: 'Color inicial del degradado', href: 'https://tailwindcss.com/docs/gradient-color-stops' },
+  { id: 'colorStopVia', label: 'Color Via', options: colorStopVia, desc: 'Color intermedio', href: 'https://tailwindcss.com/docs/gradient-color-stops' },
+  { id: 'colorStopTo', label: 'Color To', options: colorStopTo, desc: 'Color final', href: 'https://tailwindcss.com/docs/gradient-color-stops' },
+  { id: 'clip', label: 'Clip', options: clip, desc: 'Recorte del fondo', href: 'https://tailwindcss.com/docs/background-clip' },
+];
+---
+
+<GeneratorLayout
+  title="Fondo"
+  description="Color, imagen, degradado, posición, repetición y todo lo relacionado con el fondo de un elemento."
+  category="background"
+>
+  <div slot="options" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    {groups.map((g) => (
+      <Select id={g.id} classKey={`background-${g.id}`} label={g.label} description={g.desc} href={g.href} options={g.options} />
+    ))}
+  </div>
+  <Preview slot="preview" />
+  <CodeOutput slot="code" />
+</GeneratorLayout>
+
+<script>
+  import { initGenerator } from '../helper/generator';
+  initGenerator();
+</script>

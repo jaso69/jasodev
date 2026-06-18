@@ -1,0 +1,50 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  description?: string;
+  href?: string;
+  options: string[];
+  // the key under which the class is saved in the store. By default we use `id`.
+  classKey?: string;
+}
+
+const { id, label, description, href, options, classKey } = Astro.props as Props;
+const realKey = classKey || id;
+---
+
+<div class="field" data-generator-field data-class-key={realKey} data-id={id}>
+  <div class="field-label">
+    <label for={id} class="cursor-pointer">{label}</label>
+    <button
+      type="button"
+      class="text-[0.65rem] uppercase tracking-wider text-[color:var(--color-text-dim)] hover:text-[color:var(--color-brand-hover)] transition-colors"
+      data-clear-class={realKey}
+      aria-label={`Limpiar ${label}`}
+    >
+      Limpiar
+    </button>
+  </div>
+  <select
+    id={id}
+    class="select-base"
+    data-class-select
+    data-class-key={realKey}
+  >
+    <option value="" disabled selected>— Selecciona —</option>
+    {options.map((opt) => (
+      <option value={opt}>{opt}</option>
+    ))}
+  </select>
+  {description && href && (
+    <p class="text-[0.7rem] text-[color:var(--color-text-dim)] leading-snug">
+      {description}
+      {href && (
+        <a class="ml-1 text-[color:var(--color-brand-hover)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--color-brand)] focus-visible:outline-offset-2 rounded" href={href} target="_blank" rel="noopener" aria-label={`Ver documentación de ${label} (se abre en una nueva pestaña)`}>
+          Ver docs
+        </a>
+      )}
+    </p>
+  )}
+</div>
+

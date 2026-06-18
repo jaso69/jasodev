@@ -1,0 +1,80 @@
+---
+import GeneratorLayout from './GeneratorLayout.astro';
+import Select from './Select.astro';
+import Preview from './Preview.astro';
+import CodeOutput from './CodeOutput.astro';
+import { alignContent } from '../const/flexGrid/alignContent';
+import { alignItems } from '../const/flexGrid/alignItems';
+import { alignSelf } from '../const/flexGrid/alignSelf';
+import { basis } from '../const/flexGrid/basis';
+import { flex } from '../const/flexGrid/flex';
+import { flexDirection } from '../const/flexGrid/flexDirection';
+import { flexGrow } from '../const/flexGrid/flexGrow';
+import { flexShrink } from '../const/flexGrid/flexShrink';
+import { flexWrap } from '../const/flexGrid/flexWrap';
+import { gap } from '../const/flexGrid/gap';
+import { gapX } from '../const/flexGrid/gapX';
+import { gapY } from '../const/flexGrid/gapY';
+import { gridAutoColumns } from '../const/flexGrid/gridAutoColumns';
+import { gridAutoFlow } from '../const/flexGrid/gridAutoFlow';
+import { gridAutoRows } from '../const/flexGrid/gridAutoRows';
+import { gridColumnsStartEnd } from '../const/flexGrid/gridColumnsStartEnd';
+import { gridRowStartEnd } from '../const/flexGrid/gridRowStartEnd';
+import { gridTemplateColumns } from '../const/flexGrid/gridTemplateColumns';
+import { gridTemplateRows } from '../const/flexGrid/gridTemplateRows';
+import { justifyContent } from '../const/flexGrid/justifyContent';
+import { justifyItems } from '../const/flexGrid/justifyItems';
+import { justifySelf } from '../const/flexGrid/justifySelf';
+import { order } from '../const/flexGrid/order';
+import { placeContent } from '../const/flexGrid/placeContent';
+import { placeItems } from '../const/flexGrid/placeItems';
+import { placeSelf } from '../const/flexGrid/placeSelf';
+
+const groups = [
+  { id: 'flex', label: 'Flex', options: flex, desc: 'Crecimiento y encogimiento', href: 'https://tailwindcss.com/docs/flex' },
+  { id: 'basis', label: 'Flex Basis', options: basis, desc: 'Tamaño inicial', href: 'https://tailwindcss.com/docs/flex-basis' },
+  { id: 'flexDirection', label: 'Flex Direction', options: flexDirection, desc: 'Dirección', href: 'https://tailwindcss.com/docs/flex-direction' },
+  { id: 'flexWrap', label: 'Flex Wrap', options: flexWrap, desc: 'Envoltura', href: 'https://tailwindcss.com/docs/flex-wrap' },
+  { id: 'flexGrow', label: 'Flex Grow', options: flexGrow, desc: 'Crecimiento', href: 'https://tailwindcss.com/docs/flex-grow' },
+  { id: 'flexShrink', label: 'Flex Shrink', options: flexShrink, desc: 'Encogimiento', href: 'https://tailwindcss.com/docs/flex-shrink' },
+  { id: 'gap', label: 'Gap', options: gap, desc: 'Espacio entre hijos', href: 'https://tailwindcss.com/docs/gap' },
+  { id: 'gapX', label: 'Gap X', options: gapX, desc: 'Espacio horizontal', href: 'https://tailwindcss.com/docs/gap' },
+  { id: 'gapY', label: 'Gap Y', options: gapY, desc: 'Espacio vertical', href: 'https://tailwindcss.com/docs/gap' },
+  { id: 'order', label: 'Order', options: order, desc: 'Orden', href: 'https://tailwindcss.com/docs/order' },
+  { id: 'gridTemplateColumns', label: 'Grid Template Columns', options: gridTemplateColumns, desc: 'Plantilla de columnas', href: 'https://tailwindcss.com/docs/grid-template-columns' },
+  { id: 'gridColumnsStartEnd', label: 'Grid Column start/end', options: gridColumnsStartEnd, desc: 'Inicio/fin de columna', href: 'https://tailwindcss.com/docs/grid-column' },
+  { id: 'gridTemplateRows', label: 'Grid Template Rows', options: gridTemplateRows, desc: 'Plantilla de filas', href: 'https://tailwindcss.com/docs/grid-template-rows' },
+  { id: 'gridRowStartEnd', label: 'Grid Row start/end', options: gridRowStartEnd, desc: 'Inicio/fin de fila', href: 'https://tailwindcss.com/docs/grid-row' },
+  { id: 'gridAutoFlow', label: 'Grid Auto Flow', options: gridAutoFlow, desc: 'Colocación automática', href: 'https://tailwindcss.com/docs/grid-auto-flow' },
+  { id: 'gridAutoColumns', label: 'Grid Auto Columns', options: gridAutoColumns, desc: 'Columnas auto', href: 'https://tailwindcss.com/docs/grid-auto-columns' },
+  { id: 'gridAutoRows', label: 'Grid Auto Rows', options: gridAutoRows, desc: 'Filas auto', href: 'https://tailwindcss.com/docs/grid-auto-rows' },
+  { id: 'justifyContent', label: 'Justify Content', options: justifyContent, desc: 'Justificar contenido', href: 'https://tailwindcss.com/docs/justify-content' },
+  { id: 'justifyItems', label: 'Justify Items', options: justifyItems, desc: 'Justificar items', href: 'https://tailwindcss.com/docs/justify-items' },
+  { id: 'justifySelf', label: 'Justify Self', options: justifySelf, desc: 'Justificar self', href: 'https://tailwindcss.com/docs/justify-self' },
+  { id: 'alignContent', label: 'Align Content', options: alignContent, desc: 'Alinear contenido', href: 'https://tailwindcss.com/docs/align-content' },
+  { id: 'alignItems', label: 'Align Items', options: alignItems, desc: 'Alinear items', href: 'https://tailwindcss.com/docs/align-items' },
+  { id: 'alignSelf', label: 'Align Self', options: alignSelf, desc: 'Alinear self', href: 'https://tailwindcss.com/docs/align-self' },
+  { id: 'placeContent', label: 'Place Content', options: placeContent, desc: 'Posicionar contenido', href: 'https://tailwindcss.com/docs/place-content' },
+  { id: 'placeItems', label: 'Place Items', options: placeItems, desc: 'Posicionar items', href: 'https://tailwindcss.com/docs/place-items' },
+  { id: 'placeSelf', label: 'Place Self', options: placeSelf, desc: 'Posicionar self', href: 'https://tailwindcss.com/docs/place-self' },
+];
+---
+
+<GeneratorLayout
+  title="Flex & Grid"
+  description="La navaja suiza del layout: flexbox, grid, alineación, justificación y orden."
+  category="flexbox"
+>
+  <div slot="options" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    {groups.map((g) => (
+      <Select id={g.id} classKey={`flexbox-${g.id}`} label={g.label} description={g.desc} href={g.href} options={g.options} />
+    ))}
+  </div>
+  <Preview slot="preview" />
+  <CodeOutput slot="code" />
+</GeneratorLayout>
+
+<script>
+  import { initGenerator } from '../helper/generator';
+  initGenerator();
+</script>

@@ -1,0 +1,40 @@
+---
+import GeneratorLayout from './GeneratorLayout.astro';
+import Select from './Select.astro';
+import Preview from './Preview.astro';
+import CodeOutput from './CodeOutput.astro';
+import { width } from '../const/sizes/width';
+import { minWidth } from '../const/sizes/minWidth';
+import { maxWidth } from '../const/sizes/maxWidth';
+import { height } from '../const/sizes/height';
+import { minHeight } from '../const/sizes/minHeight';
+import { maxHeight } from '../const/sizes/maxHeight';
+
+const groups = [
+  { id: 'width', label: 'Width', options: width, desc: 'Anchura', href: 'https://tailwindcss.com/docs/width' },
+  { id: 'minWidth', label: 'Min Width', options: minWidth, desc: 'Anchura mínima', href: 'https://tailwindcss.com/docs/min-width' },
+  { id: 'maxWidth', label: 'Max Width', options: maxWidth, desc: 'Anchura máxima', href: 'https://tailwindcss.com/docs/max-width' },
+  { id: 'height', label: 'Height', options: height, desc: 'Altura', href: 'https://tailwindcss.com/docs/height' },
+  { id: 'minHeight', label: 'Min Height', options: minHeight, desc: 'Altura mínima', href: 'https://tailwindcss.com/docs/min-height' },
+  { id: 'maxHeight', label: 'Max Height', options: maxHeight, desc: 'Altura máxima', href: 'https://tailwindcss.com/docs/max-height' },
+];
+---
+
+<GeneratorLayout
+  title="Tamaño"
+  description="Width, height y sus variantes: controla las dimensiones de cualquier elemento."
+  category="sizing"
+>
+  <div slot="options" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    {groups.map((g) => (
+      <Select id={g.id} classKey={`sizing-${g.id}`} label={g.label} description={g.desc} href={g.href} options={g.options} />
+    ))}
+  </div>
+  <Preview slot="preview" />
+  <CodeOutput slot="code" />
+</GeneratorLayout>
+
+<script>
+  import { initGenerator } from '../helper/generator';
+  initGenerator();
+</script>

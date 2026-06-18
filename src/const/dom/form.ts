@@ -1,0 +1,15 @@
+export const form: string[] = [
+    'form',
+    'main',
+    'section',
+    'footer',
+    'header',
+    'h1',
+    'label',
+    'input',
+    'button',
+    'select',
+    'textarea',
+    'checkbox',
+    'radio',
+]

@@ -1,0 +1,16 @@
+---
+const options: { value: string; label: string }[] = [
+  { value: 'p', label: 'Párrafo (p)' },
+  { value: 'div', label: 'Contenedor (div)' },
+  { value: 'span', label: 'Línea (span)' },
+];
+---
+
+<div class="field min-w-0">
+  <label for="elemento" class="field-label cursor-pointer">Elemento destino</label>
+  <select id="elemento" class="select-base" data-store-elemento>
+    {options.map((o) => (
+      <option value={o.value}>{o.label}</option>
+    ))}
+  </select>
+</div>

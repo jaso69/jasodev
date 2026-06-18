@@ -1,0 +1,36 @@
+---
+import GeneratorLayout from './GeneratorLayout.astro';
+import Select from './Select.astro';
+import Preview from './Preview.astro';
+import CodeOutput from './CodeOutput.astro';
+import { borderCollapse } from '../const/tables/borderCollapse';
+import { borderSpacing } from '../const/tables/borderSpacing';
+import { captionSide } from '../const/tables/captionSide';
+import { tableLayout } from '../const/tables/tableLayout';
+
+const groups = [
+  { id: 'borderCollapse', label: 'Border Collapse', options: borderCollapse, desc: 'Colapso de bordes', href: 'https://tailwindcss.com/docs/border-collapse' },
+  { id: 'borderSpacing', label: 'Border Spacing', options: borderSpacing, desc: 'Espaciado entre bordes', href: 'https://tailwindcss.com/docs/border-spacing' },
+  { id: 'captionSide', label: 'Caption Side', options: captionSide, desc: 'Posición del caption', href: 'https://tailwindcss.com/docs/caption-side' },
+  { id: 'tableLayout', label: 'Table Layout', options: tableLayout, desc: 'Algoritmo de tabla', href: 'https://tailwindcss.com/docs/table-layout' },
+];
+---
+
+<GeneratorLayout
+  title="Tablas"
+  description="border-collapse, border-spacing, caption-side y table-layout."
+  category="tables"
+>
+  <div slot="options" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    {groups.map((g) => (
+      <Select id={g.id} classKey={`tables-${g.id}`} label={g.label} description={g.desc} href={g.href} options={g.options} />
+    ))}
+  </div>
+  <Preview slot="preview" />
+  <CodeOutput slot="code" />
+</GeneratorLayout>
+
+<script>
+  import { initGenerator } from '../helper/generator';
+  initGenerator();
+</script>

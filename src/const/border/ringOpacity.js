@@ -1,0 +1,17 @@
+export const ringOpacity = [
+    'ring-opacity-0',
+    'ring-opacity-5',
+    'ring-opacity-10',
+    'ring-opacity-20',
+    'ring-opacity-25',
+    'ring-opacity-30',
+    'ring-opacity-40',
+    'ring-opacity-50',
+    'ring-opacity-60',
+    'ring-opacity-70',
+    'ring-opacity-75',
+    'ring-opacity-80',
+    'ring-opacity-90',
+    'ring-opacity-95',
+    'ring-opacity-100',
+]

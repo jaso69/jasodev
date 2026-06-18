@@ -1,0 +1,19 @@
+---
+const options: { value: string; label: string }[] = [
+  { value: 'base', label: 'Base' },
+  { value: 'sm', label: 'sm · 640px' },
+  { value: 'md', label: 'md · 768px' },
+  { value: 'lg', label: 'lg · 1024px' },
+  { value: 'xl', label: 'xl · 1280px' },
+  { value: '2xl', label: '2xl · 1536px' },
+];
+---
+
+<div class="field min-w-0">
+  <label for="responsive" class="field-label cursor-pointer">Breakpoint</label>
+  <select id="responsive" class="select-base" data-store-responsive>
+    {options.map((o) => (
+      <option value={o.value}>{o.label}</option>
+    ))}
+  </select>
+</div>

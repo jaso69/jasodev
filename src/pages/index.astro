@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Home from '../components/Home.astro';
+import '../styles/global.css';
+---
+
+<Layout
+  title="Generador Tailwind CSS"
+  description="Genera clases de Tailwind con vista previa en vivo. Aprende Tailwind haciendo, sin recargas ni iframes."
+  canonical="https://jaweb.es/"
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Generador Tailwind CSS',
+    description: 'Genera clases de Tailwind con vista previa en vivo. Aprende Tailwind haciendo, sin recargas ni iframes.',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Any',
+    url: 'https://jaweb.es/',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'EUR'
+    }
+  })} />
+  <Home />
+</Layout>

@@ -1,0 +1,15 @@
+---
+const options: { value: string; label: string }[] = [
+  { value: 'dark', label: 'Oscuro' },
+  { value: 'light', label: 'Claro' },
+];
+---
+
+<div class="field min-w-0">
+  <label for="theme" class="field-label cursor-pointer">Tema</label>
+  <select id="theme" class="select-base" data-store-theme>
+    {options.map((o) => (
+      <option value={o.value}>{o.label}</option>
+    ))}
+  </select>
+</div>

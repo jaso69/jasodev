@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {},
+            },
+            plugins: [],
+        }
+    </script>
+</head>
+<body class="m-2 dark:bg-neutral-900 bg-white">
+    <code class="example">
+        <main>
+            <h1>Lorem ipsum dolor sit, amet consectetur adipisicing</h1>
+            <h2>Lorem ipsum dolor sit, amet consectetur adipisicing</h2>
+            <h3>Lorem ipsum dolor sit, amet consectetur adipisicing</h3>
+            <h4>Lorem ipsum dolor sit, amet consectetur adipisicing</h4>
+            <h5>Lorem ipsum dolor sit, amet consectetur adipisicing</h5>
+            <h6>Lorem ipsum dolor sit, amet consectetur adipisicing</h6>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing</p>
+            <span>Lorem ipsum dolor sit, amet consectetur adipisicing</span>
+            <blockquote>Lorem ipsum dolor sit, amet consectetur adipisicing</blockquote>
+            <pre>Lorem ipsum dolor sit, amet consectetur adipisicing</pre>
+            <small>Lorem ipsum dolor sit, amet consectetur adipisicing</small>
+            <a href="#">Lorem ipsum dolor</a>
+            <img src="https://picsum.photos/200/300" alt="Lorem ipsum">
+            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+            <input type="text">
+            <textarea name="css" cols="30" rows="10"></textarea>
+            <button type="submit">Guardar</button>
+            <label for="color name="color">Elige un color:</label>
+            <input type="color" />
+            <label for="fecha-hora">Elige una fecha y hora:</label>
+            <input type="datetime-local" name="fecha-hora"/>
+            <input type="checkbox" name="checkbox" id="checkbox">
+            <label for="dark">Lorem ipsum dolor</label>
+            <input type="radio" name="radio" id="radio">
+            <select name="d" id="d">
+                <option value="1">Lorem</option>
+                <option value="2">Lorem</option>
+                <option value="3">Lorem</option>
+            </select>           
+        </main>
+    </code>
+
+    <pre id="editor-container" style="height: 100vh; width: 100%;"></pre>
+
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/loader.js"></script>
+
+    <script>
+        const html_theme = document.querySelector('html')
+        const body = document.querySelector('body')
+        const div = document.querySelectorAll('div')
+        const h1 = document.querySelectorAll('h1')
+        const h2 = document.querySelectorAll('h2')
+        const h3 = document.querySelectorAll('h3')
+        const h4 = document.querySelectorAll('h4')
+        const h5 = document.querySelectorAll('h5')
+        const h6 = document.querySelectorAll('h6')
+        const p = document.querySelectorAll('p')
+        const blockquote = document.querySelectorAll('blockquote')
+        const pre = document.querySelectorAll('pre')
+        const small = document.querySelectorAll('small')
+        const a = document.querySelectorAll('a')
+        const img = document.querySelectorAll('img')
+        const button = document.querySelectorAll('button')
+        const input = document.querySelectorAll('input')
+        const label = document.querySelectorAll('label')
+        const textarea = document.querySelectorAll('textarea')
+        const select = document.querySelectorAll('select')
+        const span = document.querySelectorAll('span')
+        const checkbox = document.querySelectorAll('input[type="checkbox"]')
+        const radio = document.querySelectorAll('input[type="radio"]')
+        const color = document.querySelectorAll('input[type="color"]')
+        const datetime = document.querySelectorAll('input[type="datetime-local"]')
+        const main = document.querySelectorAll('main')
+        const code = document.querySelector('.code')
+        const example = document.querySelector('.example')
+
+        const children = document.querySelector('main').children
+        for( let chl of children) {
+            chl.setAttribute('hidden', true)
+        }
+
+        const el = localStorage.getItem('elemento')
+        const bucle = document.querySelectorAll(el)
+        for (let bucl of bucle) {
+            bucl.removeAttribute('hidden')
+        }
+
+        function addClass(elementHtml) {
+            let nameElement = ''
+            for (let opt of elementHtml) {
+                nameElement = opt.localName
+                opt.classList = localStorage.getItem(nameElement)
+            }
+        }
+
+        localStorage.getItem('div') ? addClass(div) : ''
+        localStorage.getItem('h1') ? addClass(h1) : ''
+        localStorage.getItem('h2') ? addClass(h2) : ''
+        localStorage.getItem('h3') ? addClass(h3) : ''
+        localStorage.getItem('h3') ? addClass(h3) : ''
+        localStorage.getItem('h4') ? addClass(h4) : ''
+        localStorage.getItem('h5') ? addClass(h5) : ''
+        localStorage.getItem('h6') ? addClass(h6) : ''
+        localStorage.getItem('p') ? addClass(p) : ''
+        localStorage.getItem('span') ? addClass(span) : ''
+        localStorage.getItem('blockquote') ? addClass(blockquote) : ''
+        localStorage.getItem('pre') ? addClass(pre) : ''
+        localStorage.getItem('small') ? addClass(small) : ''
+        localStorage.getItem('a') ? addClass(a) : ''
+        localStorage.getItem('img') ? addClass(img) : ''
+        localStorage.getItem('input') ? addClass(input) : ''
+        localStorage.getItem('label') ? addClass(label) : ''
+        localStorage.getItem('textarea') ? addClass(textarea) : ''
+        localStorage.getItem('select') ? addClass(select) : ''
+        localStorage.getItem('checkbox') ? addClass(checkbox) : ''
+        localStorage.getItem('radio') ? addClass(radio) : ''
+        localStorage.getItem('color') ? addClass(color) : ''
+        localStorage.getItem('datetime') ? addClass(datetime) : ''
+        localStorage.getItem('main') ? addClass(main) : ''
+        localStorage.getItem('button') ? addClass(button) : ''
+        
+        if(localStorage.getItem('theme') === 'light') {
+            html_theme.classList.add('light')
+            body.classList.add('light')
+            html_theme.classList.remove('dark')
+            body.classList.remove('dark')
+        }
+        
+        if(localStorage.getItem('theme') === 'light') {
+            html_theme.classList.add('light')
+            body.classList.add('light')
+            html_theme.classList.remove('dark')
+            body.classList.remove('dark')
+        } else{
+            html_theme.classList.add('dark')
+            body.classList.add('dark')
+            html_theme.classList.remove('light')
+            body.classList.remove('light')
+        } 
+
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+      monaco.editor.create(document.getElementById('editor-container'), {
+        value: [
+          example.innerHTML
+        ].join('\n'),
+        language: 'html',
+        theme: 'vs-dark'
+      });
+    });
+
+    </script>
+</body>
+</html>

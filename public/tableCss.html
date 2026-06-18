@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {},
+            },
+            plugins: [],
+        }
+    </script>
+</head>
+<body class="m-2 dark:bg-neutral-900 bg-white">
+    <code class="example">
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Disponibilidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Camisa</td>
+                        <td>Camisa de algodón 100%</td>
+                        <td>$25.00</td>
+                        <td>En stock</td>
+                    </tr>
+                    <tr>
+                        <td>Pantalón</td>
+                        <td>Pantalón de mezclilla azul</td>
+                        <td>$40.00</td>
+                        <td>En stock</td>
+                    </tr>
+                    <tr>
+                        <td>Zapatos</td>
+                        <td>Zapatos de cuero negros</td>
+                        <td>$60.00</td>
+                        <td>Agotado</td>
+                    </tr>
+                    <tr>
+                        <td>Sombrero</td>
+                        <td>Sombrero estilo clásico</td>
+                        <td>$15.00</td>
+                        <td>En stock</td>
+                    </tr>
+                </tbody>
+            </table> 
+        </main>
+    </code>
+    <pre id="editor-container" style="height: 100vh; width: 100%;"></pre>
+
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/loader.js"></script>
+    <script>
+        const html_theme = document.querySelector('html')
+        const body = document.querySelector('body')
+        const main = document.querySelectorAll('main')
+        const table = document.querySelectorAll('table')
+        const thead = document.querySelectorAll('thead')
+        const tr = document.querySelectorAll('tr')
+        const tbody = document.querySelectorAll('tbody')
+        const th = document.querySelectorAll('th')
+        const td = document.querySelectorAll('td')
+        const code = document.querySelector('.code')
+        const example = document.querySelector('.example')
+
+        
+        function addClass(elementHtml) {
+            let nameElement = ''
+            for (let opt of elementHtml) {
+                nameElement = opt.localName
+                opt.classList = localStorage.getItem(nameElement)
+            }
+        }
+        localStorage.getItem('main') ? addClass(main) : ''
+        localStorage.getItem('table') ? addClass(table) : ''
+        localStorage.getItem('thead') ? addClass(thead) : ''
+        localStorage.getItem('tr') ? addClass(tr) : ''
+        localStorage.getItem('tbody') ? addClass(tbody) : ''
+        localStorage.getItem('th') ? addClass(th) : ''
+        localStorage.getItem('td') ? addClass(td) : ''
+        
+        if(localStorage.getItem('theme') === 'light') {
+            html_theme.classList.add('light')
+            body.classList.add('light')
+            html_theme.classList.remove('dark')
+            body.classList.remove('dark')
+        } else{
+            html_theme.classList.add('dark')
+            body.classList.add('dark')
+            html_theme.classList.remove('light')
+            body.classList.remove('light')
+        } 
+
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+      monaco.editor.create(document.getElementById('editor-container'), {
+        value: [
+          example.innerHTML
+        ].join('\n'),
+        language: 'html',
+        theme: 'vs-dark'
+      });
+    });
+
+    </script>
+</body>
+</html>
