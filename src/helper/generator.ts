@@ -42,12 +42,11 @@ function getCurrentClass(classKey: string): string | null {
   return entries.find((e) => e.id === wanted)?.css ?? null;
 }
 
-function getUserClassesForActiveTarget(): string[] {
+function getUserClassesForElement(elementKey: ElementKey): string[] {
   const all = $classesByKey.get();
   const theme = $theme.get();
   const responsive = $responsive.get();
   const estado = $estado.get();
-  const elemento = $elemento.get();
   const out: string[] = [];
   for (const key of Object.keys(all)) {
     for (const entry of all[key] || []) {
@@ -58,9 +57,19 @@ function getUserClassesForActiveTarget(): string[] {
       if (eResponsive !== responsive) continue;
       if (eTheme !== theme) continue;
       if (eEstado !== estado) continue;
-      if (eElemento !== elemento) continue;
+      if (eElemento !== elementKey) continue;
       out.push(entry.css);
     }
+  }
+  return out;
+}
+
+function getAllUserClassesForDemo(): string[] {
+  const demoId = $demoElement.get();
+  const demo = demoBuilders[demoId] || demoBuilders.html;
+  const out: string[] = [];
+  for (const key of Object.keys(demo.targets) as ElementKey[]) {
+    out.push(...getUserClassesForElement(key));
   }
   return out;
 }
@@ -73,23 +82,37 @@ function renderCode() {
 
   const demoId = $demoElement.get();
   const demo = demoBuilders[demoId] || demoBuilders.html;
-  const userClasses = getUserClassesForActiveTarget();
   const { key: activeKey } = getActiveTarget(demoId);
 
-  // Use the live preview DOM so complex selectors (span-1, span-2, etc.) are reflected exactly.
+  // Use the live preview DOM so every applied class (across all targets) is reflected.
   const rootEl = preview?.querySelector(demo.root.tag) || preview?.firstElementChild;
   const exampleCode = rootEl?.outerHTML ?? buildDemoHtml(demoId);
 
-  let html = `<span class="tk-comment">&lt;!-- Ejemplo: ${escapeHtml(demo.label)} · destino: &lt;${escapeHtml(activeKey)}&gt; --&gt;</span>\n`;
+  let html = `<span class="tk-comment">&lt;!-- Ejemplo: ${escapeHtml(demo.label)} · editando: &lt;${escapeHtml(activeKey)}&gt; --&gt;</span>\n`;
   html += highlightHtml(exampleCode);
 
-  if (userClasses.length > 0) {
-    html += `\n\n<span class="tk-comment">&lt;!-- Clases que has añadido al &lt;${escapeHtml(activeKey)}&gt; --&gt;</span>\n`;
-    html += `<span class="tk-class">${userClasses.map(escapeHtml).join('\n')}</span>`;
+  // Build a summary of all user classes grouped by the target element they belong to.
+  const allTargets = Object.keys(demo.targets) as ElementKey[];
+  const classesByElement: { key: ElementKey; classes: string[] }[] = [];
+  let totalClasses = 0;
+  for (const key of allTargets) {
+    const classes = getUserClassesForElement(key);
+    if (classes.length > 0) {
+      classesByElement.push({ key, classes });
+      totalClasses += classes.length;
+    }
+  }
+
+  if (classesByElement.length > 0) {
+    html += `\n\n<span class="tk-comment">&lt;!-- Clases aplicadas en este demo --&gt;</span>\n`;
+    for (const { key, classes } of classesByElement) {
+      html += `<span class="tk-comment">&lt;!-- &lt;${escapeHtml(key)}&gt; --&gt;</span>\n`;
+      html += `<span class="tk-class">${classes.map(escapeHtml).join('\n')}</span>\n`;
+    }
   }
 
   out.innerHTML = html;
-  count.textContent = `${userClasses.length} clase${userClasses.length === 1 ? '' : 's'}`;
+  count.textContent = `${totalClasses} clase${totalClasses === 1 ? '' : 's'}`;
 }
 
 function renderPreviewContent(target: HTMLElement) {
@@ -107,26 +130,28 @@ function renderPreviewContent(target: HTMLElement) {
 function applyAllClasses(target: HTMLElement) {
   const demoId = $demoElement.get();
   const demo = demoBuilders[demoId] || demoBuilders.html;
-  const userClasses = getUserClassesForActiveTarget();
-  const { key: activeKey, target: activeTarget } = getActiveTarget(demoId);
 
+  // Find the target key that represents the demo root (selector === '').
+  const rootKey = (Object.keys(demo.targets) as ElementKey[]).find((k) => demo.targets[k]?.selector === '');
+
+  // Apply base + user classes to the root element.
   const rootEl = target.querySelector(demo.root.tag) as HTMLElement | null;
   if (rootEl) {
-    const rootAll = [demo.root.baseClasses, ...(activeKey === demo.root.tag ? userClasses : [])].filter(Boolean).join(' ').trim();
-    rootEl.className = rootAll;
+    const rootUserClasses = rootKey ? getUserClassesForElement(rootKey) : [];
+    rootEl.className = [demo.root.baseClasses, ...rootUserClasses].filter(Boolean).join(' ').trim();
   } else {
     target.className = demo.root.baseClasses;
   }
 
-  // Apply user classes only to the currently active target. The innerHTML template
-  // already contains the base classes for every sub-element, so we don't need to
-  // re-apply base classes for inactive targets (and we avoid overwriting a sibling
-  // target that shares the same CSS selector, e.g. "span" and "p" in the html demo).
-  if (activeTarget.selector && activeKey !== demo.root.tag) {
-    const el = target.querySelector(activeTarget.selector) as HTMLElement | null;
-    if (el) {
-      el.className = [activeTarget.baseClasses, ...userClasses].filter(Boolean).join(' ').trim();
-    }
+  // Apply base + user classes to every sub-target in the demo so the preview
+  // reflects edits made to any element, not just the currently selected one.
+  for (const [key, t] of Object.entries(demo.targets)) {
+    if (!t.selector) continue; // root already handled above
+    const userClasses = getUserClassesForElement(key as ElementKey);
+    const els = target.querySelectorAll(t.selector);
+    els.forEach((el) => {
+      (el as HTMLElement).className = [t.baseClasses, ...userClasses].filter(Boolean).join(' ').trim();
+    });
   }
 
   document.documentElement.classList.toggle('dark', $theme.get() === 'dark');
@@ -301,7 +326,7 @@ export function initGenerator() {
   const copy = document.querySelector<HTMLButtonElement>('[data-copy-code]');
   if (copy) {
     copy.addEventListener('click', async () => {
-      const userClasses = getUserClassesForActiveTarget();
+      const userClasses = getAllUserClassesForDemo();
       try {
         await navigator.clipboard.writeText(userClasses.join(' '));
         const original = copy.innerHTML;
