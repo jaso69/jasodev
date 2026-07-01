@@ -26,6 +26,7 @@ function highlightHtml(html: string): string {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
     .replace(/(&lt;\/?)([a-zA-Z][a-zA-Z0-9-]*)/g, '$1<span class="tk-tag">$2</span>')
     .replace(/\bclass(=)(&quot;)([^&]*)(&quot;)/g, '<span class="tk-attr">class</span><span class="tk-punct">=</span><span class="tk-quote">"</span><span class="tk-class">$3</span><span class="tk-quote">"</span>')
     .replace(/\b([a-zA-Z-]+)(=)(&quot;)([^&]*)(&quot;)/g, '<span class="tk-dim">$1</span><span class="tk-punct">=</span><span class="tk-quote">"</span><span class="tk-dim">$4</span><span class="tk-quote">"</span>');

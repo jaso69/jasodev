@@ -54,7 +54,6 @@ export const demoBuilders: Record<DemoElement, DemoContent> = {
     targets: {
       div: { selector: '', baseClasses: '' },
       p: { selector: 'p', baseClasses: '' },
-      span: { selector: 'p', baseClasses: '' },
     },
     fallbackTarget: 'p',
   },
