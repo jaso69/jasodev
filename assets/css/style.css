@@ -1,0 +1,686 @@
+/* =============================================================================
+   Jasodev — landing
+   HTML + CSS a mano, sin framework: el panel que vendemos es HTML plano, y esta
+   página no puede contradecirse a sí misma.
+
+   PALETA (§6.3): estos son los únicos valores que hay que tocar para heredar la
+   identidad de la UI de administración. Sustituye los de :root y los del bloque
+   oscuro por los de internal/web/assets/style.css y el resto encaja solo.
+   ============================================================================= */
+
+:root {
+  --bg:            #ffffff;
+  --bg-alt:        #f4f6f8;
+  --bg-sunken:     #eceff3;
+  --surface:       #ffffff;
+  --border:        #d8dde3;
+  --border-strong: #b9c1ca;
+
+  --text:          #1a1f26;
+  --text-muted:    #5b6672;
+  --text-faint:    #69737f;   /* 4.8:1 sobre --bg: lo usan figcaptions y letra pequeña, y tienen que leerse */
+
+  --accent:        #1f6fd4;   /* el #3d8bfd de la UI admin, oscurecido para contraste AA en claro */
+  --accent-hover:  #1a5fb8;
+  --accent-soft:   #e9f1fd;
+  --warn:          #a35a12;   /* 5.2:1 sobre --bg */
+  --warn-soft:     #fdf3e7;
+
+  --code-bg:       #12171e;
+  --code-text:     #dde3ea;
+  --code-key:      #7cc4ff;
+  --code-str:      #b6d98a;
+  --code-num:      #f0b16a;
+  --code-comment:  #7d8b99;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --radius: 6px;
+  --wrap: 1180px;
+  --wrap-narrow: 760px;
+  --gutter: clamp(18px, 5vw, 24px);   /* el margen lateral de todo: en un móvil
+                                         estrecho, 24px fijos se comen el texto */
+  --shadow: 0 1px 2px rgba(16, 24, 32, .06), 0 8px 24px rgba(16, 24, 32, .06);
+}
+
+/* Oscuro = la paleta literal de la UI de administración de jaso-rc
+   (internal/web/assets/style.css). La landing se parece a lo que el cliente verá
+   después, que es justo lo que pide §6.3. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #0f1115;   /* --bg    de la UI admin */
+    --bg-alt:        #141720;
+    --bg-sunken:     #0a0c10;
+    --surface:       #171a21;   /* --panel de la UI admin */
+    --border:        #2a2f3a;   /* --border    ídem */
+    --border-strong: #3b4250;
+
+    --text:          #e6e8ec;   /* --text  ídem */
+    --text-muted:    #9aa3b2;   /* --muted ídem */
+    --text-faint:    #7a8293;
+
+    --accent:        #3d8bfd;   /* --accent ídem */
+    --accent-hover:  #6aa6fd;
+    --accent-soft:   #16233a;
+    --warn:          #e0a35c;
+    --warn-soft:     #2a2116;
+
+    --code-bg:       #0a0c10;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+  }
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.015em; margin: 0 0 .5em; }
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); }
+h3 { font-size: 1.06rem; }
+p  { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+em { font-style: italic; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--accent-hover); }
+
+code {
+  font-family: var(--mono);
+  font-size: .875em;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: .1em .35em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute; left: 8px; top: -60px; z-index: 100;
+  background: var(--accent); color: #fff;
+  padding: .6rem 1rem; border-radius: var(--radius);
+  text-decoration: none; transition: top .15s;
+}
+.skip-link:focus { top: 8px; color: #fff; }
+
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+.wrap-narrow { max-width: var(--wrap-narrow); }
+
+.dim, .fineprint { color: var(--text-muted); }
+.fineprint { font-size: .9rem; line-height: 1.55; }
+
+/* ── Cabecera ─────────────────────────────────────────────────────────────── */
+
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.5rem; min-height: 62px;
+}
+
+.brand {
+  display: inline-flex; align-items: center; gap: .55rem;
+  color: var(--text); text-decoration: none; font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.brand-mark {
+  width: 14px; height: 14px; border-radius: 3px;
+  background: var(--accent);
+  box-shadow: inset 0 0 0 3px var(--bg);
+}
+.brand-name { font-size: 1.05rem; }
+
+.nav {
+  display: flex; align-items: center; gap: 1.4rem;
+  font-size: .93rem;
+}
+.nav a { color: var(--text-muted); text-decoration: none; }
+.nav a:hover { color: var(--text); }
+.nav .btn { color: #fff; }
+
+.nav-links {
+  display: flex; align-items: center; gap: 1.4rem;
+  list-style: none; margin: 0; padding: 0;
+}
+
+/* Escritorio: los enlaces van en línea y el botón de menú no existe. */
+.nav-toggle { display: none; }
+
+@media (max-width: 900px) {
+  /* Sin JS (.js ausente) los enlaces se quedan visibles y envuelven a una
+     segunda fila: peor, pero navegable. Todo lo que pliega el menú cuelga de
+     .js, porque solo entonces hay algo capaz de volver a abrirlo. */
+  .nav { flex-wrap: wrap; justify-content: flex-end; gap: .9rem; }
+  .nav-links { flex-wrap: wrap; gap: .9rem 1.1rem; }
+
+  .js .nav-toggle {
+    display: inline-flex; align-items: center; gap: .55rem;
+    min-height: 44px; padding: 0 .7rem;   /* 44px: objetivo táctil cómodo */
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+  }
+  .js .nav-toggle:hover { border-color: var(--border-strong); }
+
+  /* Hamburguesa dibujada con la caja y dos pseudoelementos: sin SVG ni icono.
+     Abierta, las tres barras se pliegan en una X. */
+  .burger, .burger::before, .burger::after {
+    display: block;
+    width: 16px; height: 2px; border-radius: 2px;
+    background: currentColor;
+    transition: transform .18s;
+  }
+  .burger { position: relative; }
+  .burger::before, .burger::after { content: ""; position: absolute; left: 0; }
+  .burger::before { top: -5px; }
+  .burger::after  { top: 5px; }
+
+  .nav-toggle[aria-expanded="true"] .burger { background: transparent; }
+  .nav-toggle[aria-expanded="true"] .burger::before { transform: translateY(5px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .burger::after  { transform: translateY(-5px) rotate(-45deg); }
+
+  /* Con JS, los enlaces son un panel que cuelga del botón. Va anclado a la
+     cabecera (sticky, y por tanto bloque contenedor) y no al botón: colgado del
+     botón, sus 220px se salían por el borde izquierdo. El right iguala el
+     padding de .wrap, así que el panel cae a plomo con el contenido. */
+  .js .nav-links {
+    display: none;
+    position: absolute; right: var(--gutter); top: calc(100% + 8px);
+    z-index: 60;
+    flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 0;
+    min-width: 220px;
+    max-width: calc(100vw - var(--gutter) * 2);
+    padding: .35rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .js .nav-toggle[aria-expanded="true"] + .nav-links { display: flex; }
+
+  .js .nav-links a {
+    display: block;
+    padding: .7rem .75rem;                 /* filas altas: se aciertan con el pulgar */
+    border-radius: 4px;
+    color: var(--text);
+  }
+  .js .nav-links a:hover { background: var(--bg-alt); }
+}
+
+/* Muy estrecho (≤400px): marca + Menú + CTA no caben en la fila. El botón del
+   menú se queda solo con el icono — la palabra sigue ahí para quien no lo ve —
+   y así el «Pedir una demo» no se corta. */
+@media (max-width: 400px) {
+  .header-row { gap: .6rem; }
+  .nav { gap: .6rem; }
+
+  .nav-toggle { padding: 0 .8rem; }
+  .nav-toggle-label {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+
+  .nav .btn-small { padding: 0 .7rem; font-size: .85rem; white-space: nowrap; }
+}
+
+/* ── Botones ──────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .72rem 1.3rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-size: .97rem; font-weight: 550;
+  text-decoration: none; white-space: nowrap;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.btn-small { padding: .42rem .9rem; font-size: .9rem; }
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); color: #fff; }
+
+.btn-ghost {
+  background: transparent; color: var(--text);
+  border-color: var(--border-strong);
+}
+.btn-ghost:hover { background: var(--bg-alt); color: var(--text); border-color: var(--text-faint); }
+
+.cta-row { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.6rem 0 0; }
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+
+.hero {
+  padding: clamp(3rem, 7vw, 5.5rem) 0 clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(80ch 40ch at 15% -10%, var(--accent-soft), transparent 70%);
+}
+
+.hero-grid {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(2rem, 5vw, 4rem); align-items: center;
+}
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}
+
+.lead { font-size: 1.16rem; color: var(--text-muted); max-width: 56ch; }
+.lead strong { color: var(--text); font-weight: 600; }
+
+.hero-note {
+  margin-top: 1.6rem; padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  font-size: .92rem; color: var(--text-faint);
+}
+
+/* ── Capturas ─────────────────────────────────────────────────────────────── */
+
+.shot { margin: 0; }
+.shot img {
+  display: block; width: 100%; height: auto;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.shot figcaption {
+  margin-top: .7rem;
+  font-size: .88rem; color: var(--text-faint);
+}
+
+/* Marcador de captura pendiente. Se puede borrar con main.js cuando estén las seis. */
+.shot-pending {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .5rem; padding: 1.5rem; text-align: center;
+  background: repeating-linear-gradient(
+    -45deg, var(--bg-alt), var(--bg-alt) 10px, var(--bg-sunken) 10px, var(--bg-sunken) 20px);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--text-faint);
+}
+.shot-pending b { color: var(--text-muted); font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
+.shot-pending code { font-size: .85rem; }
+.shot-pending span { font-size: .85rem; line-height: 1.5; max-width: 52ch; }
+
+/* ── Secciones ────────────────────────────────────────────────────────────── */
+
+.section { padding: clamp(3.5rem, 7vw, 5.5rem) 0; }
+.section-alt {
+  background: var(--bg-alt);
+  border-block: 1px solid var(--border);
+}
+.section-intro {
+  font-size: 1.08rem; color: var(--text-muted);
+  max-width: 62ch; margin-bottom: 2.5rem;
+}
+.section > .wrap > h2 { max-width: 24ch; }
+
+/* ── Tarjetas ─────────────────────────────────────────────────────────────── */
+
+.cards {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+/* Cinco caben en una fila; si no, prefiero 3+2 a una huérfana. */
+.cards-5 { grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.35rem;
+}
+.card h3 { color: var(--text); }
+.card p { font-size: .95rem; color: var(--text-muted); margin: 0; }
+
+.card-accent {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ── Pasos (§3.3) ─────────────────────────────────────────────────────────── */
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 3.5rem; }
+
+.step {
+  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center;
+}
+.step:nth-child(even) .step-copy { order: 2; }
+
+@media (max-width: 860px) {
+  .step { grid-template-columns: 1fr; gap: 1.25rem; }
+  .step:nth-child(even) .step-copy { order: 0; }
+}
+
+.step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; margin-bottom: .8rem;
+  background: var(--accent); color: #fff;
+  border-radius: 50%;
+  font-size: .9rem; font-weight: 650; font-variant-numeric: tabular-nums;
+}
+.step-copy h3 { font-size: 1.3rem; }
+.step-copy p { color: var(--text-muted); margin: 0; }
+
+/* ── Diagrama ─────────────────────────────────────────────────────────────── */
+
+.diagram { margin: 4rem 0 0; }
+.diagram pre {
+  margin: 0; padding: 1.5rem;
+  overflow-x: auto;
+  background: var(--code-bg); color: var(--code-text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--mono); font-size: .82rem; line-height: 1.7;
+}
+.diagram .c1 { color: var(--code-num); }
+.diagram .c2 { color: var(--code-str); }
+.diagram .c3 { color: var(--code-key); }
+.diagram .dim { color: var(--code-comment); }
+.diagram figcaption {
+  margin-top: 1rem; color: var(--text-muted);
+  font-size: .95rem; max-width: 70ch;
+}
+.diagram figcaption strong { color: var(--text); }
+
+/* ── Rejilla de características ───────────────────────────────────────────── */
+
+.feature-grid {
+  display: grid; gap: 1.75rem 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.feature-grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+.feature { border-top: 2px solid var(--border-strong); padding-top: 1rem; }
+.feature p { color: var(--text-muted); font-size: .97rem; }
+.feature .fineprint { margin-top: .75rem; }
+
+/* ── Cita destacada ───────────────────────────────────────────────────────── */
+
+.pullquote {
+  margin: 3rem 0 0;
+  padding: 1.6rem 1.8rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+.pullquote h3 { font-size: 1.2rem; }
+.pullquote p { color: var(--text-muted); max-width: 68ch; }
+.pullquote p strong { color: var(--text); }
+.pullquote-inline { margin-top: 1.75rem; }
+
+/* ── Split (código + copia) ───────────────────────────────────────────────── */
+
+.split {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem); align-items: start;
+}
+.split-even { margin-top: 3rem; gap: 1.25rem; }
+.split-even .pullquote { margin-top: 0; }
+
+/* Catálogo: la copia manda, el YAML acompaña. */
+.split-wide { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+.catalogo {
+  margin-top: 3rem; padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+  align-items: center;
+}
+.catalogo h3 { font-size: 1.35rem; }
+.catalogo p { color: var(--text-muted); }
+.catalogo p strong { color: var(--text); }
+
+@media (max-width: 900px) {
+  /* minmax(0, 1fr) y no 1fr: un track «1fr» tiene mínimo automático min-content,
+     y el min-content de un <pre> es su línea más larga sin cortar. Con «1fr» la
+     columna se estiraba hasta caber el YAML entero (572px) y se llevaba por
+     delante el ancho de toda la página. */
+  .split { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Que el bloque de código nunca imponga su ancho al padre: su <pre> ya scrollea. */
+.code { margin: 0; min-width: 0; }
+.code figcaption {
+  padding: .5rem .9rem;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border); border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-family: var(--mono); font-size: .8rem; color: var(--text-faint);
+}
+.code pre {
+  margin: 0; padding: 1.25rem;
+  overflow-x: auto;
+  background: var(--code-bg); color: var(--code-text);
+  border: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+  font-size: .85rem; line-height: 1.7;
+}
+.code code {
+  background: none; border: 0; padding: 0;
+  font-family: var(--mono); font-size: inherit; color: inherit;
+}
+.code .k  { color: var(--code-key); }
+.code .s  { color: var(--code-str); }
+.code .n  { color: var(--code-num); }
+.code .cm { color: var(--code-comment); font-style: italic; }
+
+/* ── Tablas ───────────────────────────────────────────────────────────────── */
+
+.table-scroll {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  /* Sombra al borde derecho mientras quede tabla por ver: en un móvil, si no se
+     insinúa el corte, nadie descubre que la tabla se desliza. */
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent),
+    linear-gradient(to left,  var(--bg) 30%, transparent) right,
+    radial-gradient(farthest-side at 0 50%,   rgba(0,0,0,.16), transparent),
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.16), transparent) right;
+  background-repeat: no-repeat;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+.table-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.table {
+  width: 100%; min-width: 560px;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: .96rem;
+}
+.table th, .table td {
+  padding: .85rem 1.1rem;
+  text-align: left; vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.table thead th {
+  background: var(--bg-sunken);
+  font-size: .8rem; font-weight: 650;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+.table tbody tr:last-child th,
+.table tbody tr:last-child td { border-bottom: 0; }
+.table tbody th { font-weight: 600; }
+.table td { color: var(--text-muted); }
+.table td strong { color: var(--text); font-weight: 600; }
+
+.table-compare .col-us {
+  background: var(--accent-soft);
+  color: var(--text);
+  font-weight: 550;
+  border-left: 1px solid var(--border);
+}
+.table-compare thead .col-us { color: var(--accent); }
+
+/* ── Notas ────────────────────────────────────────────────────────────────── */
+
+.notes {
+  margin-top: 2rem;
+  display: grid; gap: 1rem;
+  max-width: 78ch;
+}
+.notes p { margin: 0; color: var(--text-muted); }
+.notes p strong { color: var(--text); }
+
+.notes-warn {
+  max-width: none;
+  padding: 1.5rem 1.8rem;
+  background: var(--warn-soft);
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: var(--radius);
+}
+.notes-warn h3 { color: var(--warn); margin-bottom: .8rem; }
+
+/* ── FAQ ──────────────────────────────────────────────────────────────────── */
+
+.faq {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.faq details { border-bottom: 1px solid var(--border); }
+.faq details:last-child { border-bottom: 0; }
+
+.faq summary {
+  padding: 1.1rem 3rem 1.1rem 1.35rem;
+  position: relative;
+  cursor: pointer;
+  font-weight: 550;
+  list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; position: absolute; right: 1.35rem; top: 50%;
+  width: 8px; height: 8px; margin-top: -6px;
+  border-right: 2px solid var(--text-faint);
+  border-bottom: 2px solid var(--text-faint);
+  transform: rotate(45deg);
+  transition: transform .15s;
+}
+.faq details[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
+.faq summary:hover { background: var(--bg-alt); }
+
+.faq details p {
+  padding: 0 1.35rem 1.25rem;
+  margin: 0;
+  color: var(--text-muted);
+  max-width: 70ch;
+}
+
+/* ── CTA final ────────────────────────────────────────────────────────────── */
+
+.cta-final {
+  border-top: 1px solid var(--border);
+  background: radial-gradient(70ch 35ch at 50% 0%, var(--accent-soft), transparent 70%);
+  text-align: center;
+}
+/* El h2 hereda un max-width de 24ch; sin margen automático la caja se queda
+   pegada a la izquierda y el título no cuadra con el texto que tiene debajo. */
+.cta-final h2 { max-width: none; margin-inline: auto; }
+.cta-final .lead { margin-inline: auto; }
+.cta-final .cta-row { justify-content: center; }
+.cta-final .fineprint { margin-top: 1.5rem; }
+
+/* ── Pie ──────────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-alt);
+  padding: 2rem 0;
+  font-size: .9rem;
+}
+.footer-row {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+}
+.site-footer p { margin: 0; color: var(--text-muted); }
+
+/* ── Pantallas pequeñas: los últimos ajustes ──────────────────────────────────
+   Todo lo de aquí es legibilidad, no maquetación: la maquetación ya colapsa
+   sola con las rejillas auto-fit y los minmax(0, 1fr). */
+@media (max-width: 620px) {
+  /* El diagrama ASCII no cabe en un móvil ni cabiendo: se lee deslizando dentro
+     de su caja. Al menos que quepa más de una palabra por pantalla. */
+  .diagram { margin-top: 2.5rem; }
+  .diagram pre { padding: 1rem; font-size: .68rem; line-height: 1.9; }
+
+  /* Cajas de código y citas: menos relleno, más texto por línea. */
+  .code pre { padding: 1rem; font-size: .8rem; }
+  .pullquote { padding: 1.25rem 1.3rem; margin-top: 2rem; }
+  .card { padding: 1.15rem 1.2rem; }
+
+  /* Los CTA del hero, a lo ancho: son el objetivo de la página. */
+  .cta-row .btn { flex: 1 1 auto; justify-content: center; }
+
+  /* Un h2 de 24ch en móvil parte fatal; que use el ancho que hay. */
+  .section > .wrap > h2 { max-width: none; }
+
+  .site-footer .footer-row { gap: .5rem; }
+}
+
+/* ── Barras de desplazamiento ─────────────────────────────────────────────────
+   Las cajas que scrollean (código, diagrama, tablas) llevaban la barra blanca
+   del sistema cruzando un bloque oscuro. Se tiñen a juego. */
+.code pre, .diagram pre {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, .28) transparent;
+}
+.code pre::-webkit-scrollbar, .diagram pre::-webkit-scrollbar { height: 8px; }
+.code pre::-webkit-scrollbar-track, .diagram pre::-webkit-scrollbar-track { background: transparent; }
+.code pre::-webkit-scrollbar-thumb, .diagram pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, .28); border-radius: 4px;
+}
+
+.table-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.table-scroll::-webkit-scrollbar { height: 8px; }
+.table-scroll::-webkit-scrollbar-track { background: transparent; }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }

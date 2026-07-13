@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Control AV sin programar: proyectores, displays y luces desde el navegador | Jasodev</title>
+<meta name="description" content="Sistema de control AV dirigido por configuración. Das de alta el proyector desde el navegador y su control queda publicado como API HTTP. El mando táctil lo dibujas arrastrando. Sin entorno propietario y sin licencia por pantalla.">
+<link rel="canonical" href="https://jasodev.es/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="Jasodev">
+<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+
+<!-- Open Graph. La imagen que gana es la del editor (§6.5). -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://jasodev.es/">
+<meta property="og:site_name" content="Jasodev">
+<meta property="og:title" content="Control AV sin programar la instalación">
+<meta property="og:description" content="Das de alta el equipo. El control se publica solo. El mando lo dibujas tú.">
+<meta property="og:image" content="https://jasodev.es/assets/img/og-editor.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="El diseñador de mandos de Jasodev, con un panel de sala a medio dibujar sobre el lienzo.">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Marca que hay JS antes de pintar: sin esto el menú móvil se plegaría aunque
+     nada pudiera desplegarlo. Va aquí, en línea, para que no parpadee. -->
+<script>document.documentElement.classList.add("js");</script>
+
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="preload" as="image" href="/assets/img/editor-lienzo.webp" fetchpriority="high">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://jasodev.es/#software",
+      "name": "Jasodev",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "Control audiovisual",
+      "operatingSystem": "Ubuntu Server (Linux)",
+      "url": "https://jasodev.es/",
+      "image": "https://jasodev.es/assets/img/og-editor.png",
+      "inLanguage": "es",
+      "description": "Sistema de control AV dirigido por configuración: das de alta el equipo desde el navegador y su control se publica como API HTTP. El mando táctil se dibuja arrastrando, sin programar y sin licencia por pantalla.",
+      "featureList": [
+        "Alta de equipos desde un formulario web, sin programar",
+        "Control publicado como API HTTP con recarga en caliente",
+        "Diseñador de mandos táctiles por arrastrar y soltar",
+        "Paneles servidos como web, sin app ni licencia por pantalla",
+        "Drivers PJLink, Philips SICP, OSC (Midas M32 / Behringer X32), DALI, TCP/UDP genérico y RS-232",
+        "Configuración en YAML legible y portable"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "price": "0",
+        "availability": "https://schema.org/InStock",
+        "description": "Demo bajo petición"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://jasodev.es/#organizacion",
+      "name": "Jasodev",
+      "url": "https://jasodev.es/",
+      "logo": "https://jasodev.es/assets/img/favicon.svg",
+      "email": "hola@jasodev.es",
+      "description": "Control AV dirigido por configuración: jaso-rc, el servidor de control, y front-rc, el diseñador de mandos."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://jasodev.es/#web",
+      "url": "https://jasodev.es/",
+      "name": "Jasodev",
+      "inLanguage": "es",
+      "publisher": { "@id": "https://jasodev.es/#organizacion" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://jasodev.es/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Necesito saber programar?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Das de alta el equipo en un formulario y dibujas el mando arrastrando. No hay entorno de desarrollo que instalar ni certificación que sacarse."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Y si se cae el servidor?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El control es un servicio systemd que rearranca solo. Y los equipos conservan su estado físico: una sala encendida no se apaga porque el control se reinicie."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Funciona sin internet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí. Todo es LAN. No hay nube, no hay cuenta y no llama a casa."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo controlar un equipo que no está en la lista?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Casi siempre sí. El catálogo de marcas y modelos lo amplías tú desde la web: creas el modelo, le asignas un driver y escribes sus comandos. Si el equipo habla PJLink o SICP, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y RS-232 mandan la cadena cruda que el equipo entienda. Solo un protocolo verdaderamente nuevo necesita código."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuántas tablets puedo colgar?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Las que quieras. El panel es una URL: no se cuentan dispositivos ni se licencian pantallas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo seguir usando mis paneles actuales?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Si saben abrir una URL, sí: los comandos se ejecutan también por GET."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo hacerme mi propio panel en vez de usar el editor?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, contra la API HTTP. El editor es la vía cómoda, no una jaula."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿El panel se adapta a cualquier pantalla?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El diseño se dibuja en un lienzo de tamaño fijo y se escala al viewport, que no es lo mismo que un diseño web adaptativo. En la práctica, dibujas para el formato de la tablet que vas a colgar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Quién es el dueño de la configuración y de los diseños?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tú. Son ficheros de texto en tu máquina, y te los llevas cuando quieras."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Jasodev</span>
+    </a>
+
+    <!-- Sin JavaScript los enlaces se ven, repartidos en dos filas: la clase .js
+         del <html> es la que autoriza a plegarlos en un menú. Nunca se esconde
+         una navegación que luego nadie pueda abrir. -->
+    <nav class="nav" aria-label="Principal">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="burger" aria-hidden="true"></span>
+        <span class="nav-toggle-label">Menú</span>
+      </button>
+
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="#como-funciona">Cómo funciona</a></li>
+        <li><a href="#disenador">El diseñador</a></li>
+        <li><a href="#compatibilidad">Compatibilidad</a></li>
+        <li><a href="#seguridad">Seguridad</a></li>
+        <li><a href="#faq">Preguntas</a></li>
+      </ul>
+
+      <a class="btn btn-small" href="#hablemos">Pedir una demo</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+
+<!-- ─────────────────────────── HERO (§3.1) ─────────────────────────── -->
+<section class="hero" aria-labelledby="hero-titulo">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1 id="hero-titulo">Control AV sin programar la instalación.</h1>
+      <p class="lead">
+        Das de alta el proyector desde el navegador y su control queda publicado al instante como
+        API HTTP. Dibujas el mando arrastrando botones. Lo abres en una tablet.
+        <strong>Sin recompilar, sin volver a la obra.</strong>
+      </p>
+
+      <p class="cta-row">
+        <a class="btn btn-primary" href="#hablemos">Pedir una demo</a>
+        <a class="btn btn-ghost" href="#como-funciona">Ver cómo funciona</a>
+      </p>
+
+      <p class="hero-note">
+        Software, no hardware propietario: un binario y un contenedor en un mini-PC con Ubuntu.
+      </p>
+    </div>
+
+    <figure class="hero-shot shot">
+      <img src="/assets/img/editor-lienzo.webp"
+           width="1919" height="1003" fetchpriority="high" decoding="async"
+           alt="El diseñador de mandos: a la izquierda la paleta de elementos, en el centro el lienzo con un panel de sala a medio dibujar con botones de proyector y pantalla, y a la derecha el panel de propiedades del elemento seleccionado.">
+      <figcaption>El diseñador de mandos. Arrastras el botón, eliges el equipo, generas.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────────────── EL PROBLEMA (§3.2) ─────────────────────── -->
+<section class="section" id="problema" aria-labelledby="problema-titulo">
+  <div class="wrap">
+    <h2 id="problema-titulo">Lo que hoy cuesta una visita a obra</h2>
+    <p class="section-intro">
+      Cinco cosas que un integrador AV da por perdidas porque siempre han sido así.
+    </p>
+
+    <ul class="cards cards-5" role="list">
+      <li class="card">
+        <h3>Cada cambio es programar</h3>
+        <p>Añadir un proyector o mover un botón significa abrir el entorno del fabricante,
+           escribir código, compilar y subir. Un cambio de cinco minutos se convierte en un
+           desplazamiento.</p>
+      </li>
+      <li class="card">
+        <h3>Dependes del fabricante</h3>
+        <p>Herramienta propietaria, certificación, licencia por procesador. Un ecosistema del que
+           no se sale.</p>
+      </li>
+      <li class="card">
+        <h3>El cliente no puede tocar nada</h3>
+        <p>Todo pasa por ti, incluso lo trivial. Y lo trivial es la mayoría de las llamadas.</p>
+      </li>
+      <li class="card">
+        <h3>No sabes qué hay montado</h3>
+        <p>La configuración vive dentro de un programa compilado, no en algo que se pueda abrir y
+           leer.</p>
+      </li>
+      <li class="card card-accent">
+        <h3>El mando es lo más caro y lo más rígido</h3>
+        <p>Panel táctil propietario, licencia por pantalla, y mover un botón de sitio es un ticket.
+           Y el cliente <em>siempre</em> quiere mover un botón de sitio.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ────────────────────── CÓMO FUNCIONA (§3.3) ────────────────────── -->
+<section class="section section-alt" id="como-funciona" aria-labelledby="como-funciona-titulo">
+  <div class="wrap">
+    <h2 id="como-funciona-titulo">Das de alta el equipo. El control se publica solo. El mando lo dibujas tú.</h2>
+    <p class="section-intro">
+      Cuatro pasos, y en ninguno se escribe una línea de código.
+    </p>
+
+    <ol class="steps" role="list">
+
+      <li class="step">
+        <div class="step-copy">
+          <span class="step-num">1</span>
+          <h3>Das de alta el equipo</h3>
+          <p>Eliges tipo → marca → modelo en el catálogo, y el driver, el puerto y los comandos ya
+             vienen puestos. Tú pones la IP.</p>
+        </div>
+        <figure class="shot">
+          <img src="/assets/img/alta-equipo.webp" width="1913" height="998" loading="lazy" decoding="async"
+               alt="Formulario de alta de un equipo: los desplegables de tipo, marca y modelo ya han rellenado el driver PJLink y el puerto, y solo queda escribir la dirección IP del proyector de la sala 1.">
+        </figure>
+      </li>
+
+      <li class="step">
+        <div class="step-copy">
+          <span class="step-num">2</span>
+          <h3>El control se publica solo</h3>
+          <p>Aparecen los endpoints HTTP de ese equipo, listos para llamar. Sin recompilar y sin
+             reiniciar el servicio: la configuración se recarga en caliente.</p>
+        </div>
+        <figure class="shot">
+          <img src="/assets/img/endpoints.webp" width="1906" height="995" loading="lazy" decoding="async"
+               alt="Lista de endpoints HTTP publicados para el proyector recién dado de alta: encender, apagar, seleccionar entrada y consultar estado.">
+        </figure>
+      </li>
+
+      <li class="step">
+        <div class="step-copy">
+          <span class="step-num">3</span>
+          <h3>Dibujas el mando</h3>
+          <p>Arrastras botones y sliders a un lienzo y eliges el equipo y el comando de un
+             desplegable, que sale del propio servidor y no de tu memoria.</p>
+        </div>
+        <figure class="shot">
+          <img src="/assets/img/desplegable-comandos.webp" width="1902" height="984" loading="lazy" decoding="async"
+               alt="El desplegable de comandos abierto sobre un botón del lienzo, mostrando los equipos y los comandos reales que publica el servidor de control.">
+        </figure>
+      </li>
+
+      <li class="step">
+        <div class="step-copy">
+          <span class="step-num">4</span>
+          <h3>Lo cuelgas en la pared</h3>
+          <p>Generas, y la tablet abre una URL. Sin app que instalar, sin tienda de aplicaciones y
+             sin licencia por pantalla.</p>
+        </div>
+        <figure class="shot">
+          <img src="/assets/img/tablet-pared.webp" width="1405" height="619" loading="lazy" decoding="async"
+               alt="El panel generado, funcionando en una tablet colgada en la pared de una sala de reuniones.">
+        </figure>
+      </li>
+
+    </ol>
+
+    <figure class="diagram">
+      <pre role="img" aria-label="Diagrama: la tablet con el panel generado habla por HTTP con front-rc, que diseña, genera, sirve y pone el token; front-rc habla por HTTP con jaso-rc, que publica el control; y jaso-rc habla con el equipo mediante PJLink, SICP, OSC, RS-232 o DALI.">
+<span class="c1">Tablet / Web / App</span>  ──HTTP JSON──▶  <span class="c2">front-rc</span>  ──HTTP JSON──▶  <span class="c3">jaso-rc</span>  ──PJLink · SICP · OSC · RS-232 · DALI──▶  Equipo
+   <span class="dim">(el panel generado)</span>              <span class="dim">(diseña, genera,</span>          <span class="dim">(publica el control)</span>
+                                    <span class="dim">sirve y pone el token)</span></pre>
+      <figcaption>
+        <strong>jaso-rc habla con los equipos. front-rc es la cara que toca la gente.</strong>
+        Tú no tocas un protocolo, y tampoco un editor de código.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ───────────────────── EL DISEÑADOR (§3.4) ───────────────────── -->
+<section class="section" id="disenador" aria-labelledby="disenador-titulo">
+  <div class="wrap">
+    <h2 id="disenador-titulo">El diseñador de mandos</h2>
+    <p class="section-intro">
+      El mando de la sala se dibuja arrastrando, en el navegador. Es la parte que ve el cliente
+      final, y la que hasta ahora era la más cara de cambiar.
+    </p>
+
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>Arrastras, no programas</h3>
+        <p>Botones, sliders, imágenes, etiquetas, líneas y rectángulos. Varias pantallas por diseño
+           —vídeo, audio, luces— con navegación entre ellas.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Con la cara del cliente</h3>
+        <p>Fondos, gradientes, su logo, y 36 iconos SVG de AV incluidos.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Cambiar un botón de sitio son dos minutos</h3>
+        <p>Lo mueves, generas, y la tablet lo tiene al recargar. Sin compilar nada, sin volver a la
+           sala.</p>
+      </div>
+
+      <div class="feature">
+        <h3>El panel no miente</h3>
+        <p>El botón se ilumina porque el proyector <em>dice</em> que está encendido, no porque
+           alguien lo haya pulsado. El fader se coloca en el nivel real de la mesa. Y el equipo que
+           no responde se ve apagado en el panel. Si alguien enciende el proyector con el mando de
+           la pared, el panel se entera.</p>
+        <p class="fineprint">
+          El estado se consulta cada pocos segundos, no se empuja: refleja el equipo de verdad,
+          pero no es instantáneo. Y solo puede reflejar lo que cada driver publica.
+        </p>
+      </div>
+    </div>
+
+    <!-- El argumento más fuerte de la sección: su propia caja (§3.4). -->
+    <aside class="pullquote">
+      <h3>No puedes equivocarte de comando</h3>
+      <p>
+        El editor le pregunta al servidor qué equipos hay y qué admite cada uno, y te ofrece
+        <strong>listas cerradas</strong>. Un comando mal tecleado se descubre en la sala, con la
+        reunión empezando. Aquí no llega a existir.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<!-- ─────────────────── EL PANEL QUE SALE (§3.5) ─────────────────── -->
+<section class="section section-alt" id="panel" aria-labelledby="panel-titulo">
+  <div class="wrap">
+    <h2 id="panel-titulo">El panel que sale</h2>
+
+    <div class="feature-grid feature-grid-3">
+      <div class="feature">
+        <h3>Es una web, no una app</h3>
+        <p>HTML, CSS y JavaScript planos, sin framework ni dependencias. Cualquier tablet, Mac, PC o
+           móvil con navegador. Nada que instalar, nada que caduque, ninguna tienda de aplicaciones
+           de por medio.</p>
+      </div>
+      <div class="feature">
+        <h3>Cuelga los paneles que quieras</h3>
+        <p>Son URLs. Sin licencia por pantalla, sin hardware homologado, sin contar dispositivos.</p>
+      </div>
+      <div class="feature">
+        <h3>Dura años</h3>
+        <p>No hay build que mantener ni framework que dentro de tres años pida una migración. Una
+           tablet vieja lo abre igual que una nueva.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── TU INSTALACIÓN, EN UN FICHERO (§2.1.3 y §3.7) ─────────── -->
+<section class="section" id="configuracion" aria-labelledby="configuracion-titulo">
+  <div class="wrap">
+    <h2 id="configuracion-titulo">Tu instalación, en un fichero que puedes leer</h2>
+    <p class="section-intro">
+      No hay un programa compilado escondiendo tu sala. Hay un YAML, y se entiende sin que nadie te
+      lo explique.
+    </p>
+
+    <div class="split">
+      <figure class="code">
+        <figcaption>configs/devices.yaml</figcaption>
+        <pre><code><span class="cm"># Equipos a controlar. Gestionado desde la web de administración.</span>
+<span class="k">devices</span>:
+    - <span class="k">id</span>: proyector-sala1
+      <span class="k">driver</span>: pjlink
+      <span class="k">network</span>:
+        <span class="k">host</span>: <span class="n">192.168.10.50</span>
+        <span class="k">port</span>: <span class="n">4352</span>
+        <span class="k">transport</span>: tcp
+        <span class="k">timeout_ms</span>: <span class="n">2000</span>
+      <span class="k">commands</span>:
+        <span class="k">power_on</span>: <span class="s">POWR 1</span>
+        <span class="k">power_off</span>: <span class="s">POWR 0</span>
+        <span class="k">input_hdmi1</span>: <span class="s">INPT 31</span></code></pre>
+      </figure>
+
+      <div class="split-copy">
+        <p>
+          Lo escribe la web de administración por ti —tú eliges marca y modelo del catálogo—, pero
+          <strong>puedes abrirlo, leerlo, versionarlo y llevártelo</strong>. Dentro de tres años
+          seguirá diciendo qué hay montado en esa sala.
+        </p>
+        <p>
+          Y cuando lo cambias, el servidor <strong>recarga en caliente</strong>: los equipos nuevos
+          quedan publicados sin reiniciar el servicio y sin recompilar nada.
+        </p>
+
+        <aside class="pullquote pullquote-inline">
+          <h3>El error dice la verdad</h3>
+          <p>
+            Cuando el proyector no arranca, el panel no dice «error 502». Distingue lo que es un
+            fallo de la sala —<code>El equipo no responde</code>— de lo que es un fallo del diseño
+            —<code>comando no configurado</code>—, y lo dice con esas palabras.
+          </p>
+          <p class="fineprint">
+            La mayoría de los fallos de una sala no son fallos del software: es un proyector apagado
+            desde la pared o un cable suelto. Confundirlos manda al técnico a mirar al sitio
+            equivocado.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────── COMPATIBILIDAD (§3.8) ──────────────────── -->
+<section class="section section-alt" id="compatibilidad" aria-labelledby="compatibilidad-titulo">
+  <div class="wrap">
+    <h2 id="compatibilidad-titulo">Qué controla hoy</h2>
+    <p class="section-intro">
+      Solo lo que existe y está en el código. Ni una casilla de más.
+    </p>
+
+    <div class="table-scroll" tabindex="0" role="region"
+         aria-label="Familias de equipo, driver y qué controla cada uno (tabla desplazable)">
+      <table class="table">
+        <caption class="visually-hidden">Familias de equipo, driver y qué controla cada uno</caption>
+        <thead>
+          <tr><th scope="col">Familia</th><th scope="col">Driver</th><th scope="col">Qué controla</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Proyectores</th>
+            <td><strong>PJLink</strong></td>
+            <td>El estándar de facto: Epson, Panasonic, NEC, Sony…</td>
+          </tr>
+          <tr>
+            <th scope="row">Displays y cartelería</th>
+            <td><strong>Philips SICP</strong></td>
+            <td>Pantallas profesionales Philips</td>
+          </tr>
+          <tr>
+            <th scope="row">Audio</th>
+            <td><strong>Midas M32 / Behringer X32</strong> (OSC)</td>
+            <td>Faders, mutes, escenas</td>
+          </tr>
+          <tr>
+            <th scope="row">Iluminación</th>
+            <td><strong>DALI</strong> vía pasarela</td>
+            <td>Direcciones, grupos, escenas y regulación 0–254</td>
+          </tr>
+          <tr>
+            <th scope="row">Cualquier equipo TCP/UDP</th>
+            <td><strong>TCP genérico</strong></td>
+            <td>La cadena cruda que el equipo entienda</td>
+          </tr>
+          <tr>
+            <th scope="row">Cualquier equipo serie</th>
+            <td><strong>RS-232</strong></td>
+            <td>Matrices, pantallas motorizadas, relés</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notes">
+      <p>
+        <strong>Esos son los protocolos, no la lista de equipos.</strong> Los equipos concretos
+        viven en un catálogo — y el catálogo lo amplías tú.
+      </p>
+      <p>
+        <strong>Todo lo que jaso-rc controla, front-rc lo dibuja.</strong> El editor no tiene una
+        lista propia de equipos: lee la del servidor.
+      </p>
+      <p class="fineprint">
+        El soporte DALI está verificado de punta a punta contra pasarela simulada, no todavía contra
+        una pasarela física. Lo digo aquí y no en la letra pequeña de un contrato.
+      </p>
+    </div>
+
+    <!-- El catálogo: tipo → marca → modelo, con CRUD desde /ui/catalog -->
+    <div class="split split-wide catalogo">
+      <div class="split-copy">
+        <h3>El catálogo crece contigo</h3>
+        <p>
+          El servidor trae un catálogo de <strong>tipo → marca → modelo</strong>. Cuando das de alta
+          un equipo eliges los tres, y el driver, el puerto y los comandos ya vienen puestos: tú
+          solo escribes la IP.
+        </p>
+        <p>
+          ¿Un proyector que no está? <strong>Lo añades tú, desde la misma web</strong>, sin tocar un
+          fichero: creas la marca, creas el modelo, eliges su driver y dejas escritos sus comandos.
+          Y se queda ahí <strong>para siempre y para todas tus instalaciones</strong> — el trabajo de
+          descifrar un equipo raro se hace una vez, no en cada obra.
+        </p>
+        <p class="fineprint">
+          El matiz honesto: <strong>añadir un modelo es un formulario</strong>, y reutiliza uno de
+          los drivers de arriba. <strong>Añadir un protocolo nuevo</strong> —uno que no sea PJLink,
+          SICP, OSC, DALI, TCP o serie— sigue siendo un fichero Go. Pero si el equipo habla TCP, UDP
+          o RS-232, ya se controla hoy con los drivers genéricos: es la cadena cruda que el equipo
+          entienda, y esa la pones en el catálogo.
+        </p>
+      </div>
+
+      <figure class="code">
+        <figcaption>configs/catalog.yaml — lo escribe la web por ti</figcaption>
+        <pre><code><span class="k">categories</span>:
+  - <span class="k">id</span>: proyector
+    <span class="k">brands</span>:
+      - <span class="k">id</span>: nec
+        <span class="k">models</span>:
+          - <span class="k">id</span>: np-pa653u
+            <span class="k">driver</span>: pjlink
+            <span class="k">defaults</span>:
+              <span class="k">port</span>: <span class="n">4352</span>
+              <span class="k">commands</span>:
+                <span class="k">power_on</span>: <span class="s">POWR 1</span>
+                <span class="k">input_hdmi1</span>: <span class="s">INPT 31</span>
+                <span class="k">mute_on</span>: <span class="s">AVMT 31</span>   <span class="cm"># lo tecleas una vez</span></code></pre>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────── SEGURIDAD (§3.9) ────────────────────── -->
+<section class="section" id="seguridad" aria-labelledby="seguridad-titulo">
+  <div class="wrap">
+    <h2 id="seguridad-titulo">Seguridad</h2>
+    <p class="section-intro">
+      Si has visto instalaciones abiertas de par en par, esta sección es para ti.
+    </p>
+
+    <ul class="cards cards-4" role="list">
+      <li class="card">
+        <h3>Redes permitidas</h3>
+        <p>Solo se aceptan peticiones desde la LAN de control. El resto, 403.</p>
+      </li>
+      <li class="card">
+        <h3>Un token por panel</h3>
+        <p>Revocas el del vestíbulo sin tocar los demás. Del token solo se guarda su huella: quien
+           lea el fichero de configuración no entra.</p>
+      </li>
+      <li class="card">
+        <h3>Login con contraseña</h3>
+        <p>Para las personas que administran, con freno a la fuerza bruta.</p>
+      </li>
+      <li class="card">
+        <h3>HTTPS</h3>
+        <p>Servido por el propio binario, con certificado incluido.</p>
+      </li>
+    </ul>
+
+    <div class="split split-even">
+      <aside class="pullquote">
+        <h3>La API nunca acepta la cookie de sesión</h3>
+        <p>
+          Si bastara, cualquier página web que visitara el administrador podría apagar un proyector
+          con una etiqueta <code>&lt;img&gt;</code> invisible. Con token, no.
+        </p>
+      </aside>
+
+      <aside class="pullquote">
+        <h3>El token nunca llega a la tablet</h3>
+        <p>
+          Una tablet colgada en la pared es un dispositivo público: el panel no lleva credenciales.
+          Llama a su propio servidor, y este reenvía la orden poniendo el token. Quien descuelgue la
+          tablet no se lleva la llave de la instalación.
+        </p>
+      </aside>
+    </div>
+
+    <div class="notes notes-warn">
+      <h3>Y lo que no protege, porque lo vas a preguntar</h3>
+      <p>
+        <strong>Los paneles no piden contraseña, a propósito.</strong> Una tablet en la pared no
+        puede escribirla. Quien alcance el servidor de paneles puede pulsar un botón, igual que
+        quien alcanza el mando físico de la pared.
+      </p>
+      <p>
+        <strong>La defensa de los paneles es la red</strong>: una VLAN de control y la lista blanca
+        de IPs. Es una decisión, no un descuido, y prefiero contártela ahora que el día de la puesta
+        en marcha.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── INSTALACIÓN Y OPERACIÓN (§3.10 y §2.3) ────────────── -->
+<section class="section section-alt" id="instalacion" aria-labelledby="instalacion-titulo">
+  <div class="wrap">
+    <h2 id="instalacion-titulo">Instalación y operación</h2>
+    <p class="section-intro">
+      Escrito para quien va a mantenerlo dentro de tres años.
+    </p>
+
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>El control es un binario</h3>
+        <p>Sin base de datos y sin runtime que actualizar. Un servicio systemd endurecido, con
+           instalador idempotente: reinstalar no pisa tu configuración, ni tus equipos, ni tu
+           certificado.</p>
+      </div>
+      <div class="feature">
+        <h3>El diseñador es un contenedor</h3>
+        <p>Un <code>docker compose up -d</code> en la misma máquina, y solo lo necesitas cuando
+           diseñas. Lo que gobierna la sala —lo que no se puede caer— no tiene runtime.</p>
+      </div>
+      <div class="feature">
+        <h3>Todo cabe en dos carpetas de texto</h3>
+        <p>La configuración es YAML legible; los diseños y las imágenes, ficheros. Copia de
+           seguridad, restauración y reset desde las propias webs. Clonar una instalación entera en
+           otro edificio es restaurar una copia.</p>
+      </div>
+      <div class="feature">
+        <h3>Un mini-PC con Ubuntu Server</h3>
+        <p>Sin hardware propietario, sin procesador homologado, sin nube. No hay cuenta y no llama a
+           casa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────── COMPARATIVA (§3.11) ────────────────────── -->
+<section class="section" id="comparativa" aria-labelledby="comparativa-titulo">
+  <div class="wrap">
+    <h2 id="comparativa-titulo">Frente a un sistema propietario</h2>
+    <p class="section-intro">
+      Solo hechos comprobables. Ni una opinión.
+    </p>
+
+    <div class="table-scroll" tabindex="0" role="region"
+         aria-label="Comparación con un sistema propietario (tabla desplazable)">
+      <table class="table table-compare">
+        <caption class="visually-hidden">Comparación entre un sistema de control AV propietario típico y Jasodev</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">Aspecto</span></th>
+            <th scope="col">Sistema propietario típico</th>
+            <th scope="col" class="col-us">Jasodev</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Añadir un equipo</th>
+            <td>Programar, compilar, subir</td>
+            <td class="col-us">Un formulario web</td>
+          </tr>
+          <tr>
+            <th scope="row">Diseñar el mando</th>
+            <td>Entorno propietario y programación</td>
+            <td class="col-us">Arrastrar y soltar en el navegador</td>
+          </tr>
+          <tr>
+            <th scope="row">Paneles táctiles</th>
+            <td>Hardware propietario, licencia por pantalla</td>
+            <td class="col-us">Cualquier tablet con navegador. Sin licencia</td>
+          </tr>
+          <tr>
+            <th scope="row">Cambios en caliente</th>
+            <td>Reinicio del procesador</td>
+            <td class="col-us">Sin reiniciar</td>
+          </tr>
+          <tr>
+            <th scope="row">Entorno de desarrollo</th>
+            <td>Propietario, con certificación</td>
+            <td class="col-us">Ninguno</td>
+          </tr>
+          <tr>
+            <th scope="row">Configuración</th>
+            <td>Dentro de un programa compilado</td>
+            <td class="col-us">YAML legible y HTML plano</td>
+          </tr>
+          <tr>
+            <th scope="row">Integrar con otro software</th>
+            <td>SDK del fabricante</td>
+            <td class="col-us">API HTTP y JSON</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="fineprint">
+      AMX y Crestron son marcas registradas de sus respectivos propietarios, y no tienen relación
+      con este proyecto. Se nombran solo como referencia de categoría.
+    </p>
+  </div>
+</section>
+
+<!-- ───────────────────────── FAQ (§3.13) ───────────────────────── -->
+<section class="section section-alt" id="faq" aria-labelledby="faq-titulo">
+  <div class="wrap wrap-narrow">
+    <h2 id="faq-titulo">Preguntas que me hacen siempre</h2>
+
+    <div class="faq">
+      <details>
+        <summary>¿Necesito saber programar?</summary>
+        <p>No. Das de alta el equipo en un formulario y dibujas el mando arrastrando. No hay
+           entorno de desarrollo que instalar ni certificación que sacarse.</p>
+      </details>
+
+      <details>
+        <summary>¿Y si se cae el servidor?</summary>
+        <p>El control es un servicio systemd que rearranca solo. Y los equipos conservan su estado
+           físico: una sala encendida no se apaga porque el control se reinicie.</p>
+      </details>
+
+      <details>
+        <summary>¿Funciona sin internet?</summary>
+        <p>Sí. Todo es LAN. No hay nube, no hay cuenta y no llama a casa.</p>
+      </details>
+
+      <details>
+        <summary>¿Puedo controlar un equipo que no está en la lista?</summary>
+        <p>Casi siempre sí, y sin esperarme. El catálogo de marcas y modelos lo amplías tú desde la
+           web: creas el modelo, le asignas un driver y escribes sus comandos. Si el equipo habla
+           PJLink o SICP, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y
+           RS-232 mandan la cadena cruda que el equipo entienda. Solo un protocolo verdaderamente
+           nuevo necesita código, y eso es un fichero Go, no un rediseño.</p>
+      </details>
+
+      <details>
+        <summary>¿Cuántas tablets puedo colgar?</summary>
+        <p>Las que quieras. El panel es una URL: no se cuentan dispositivos ni se licencian
+           pantallas.</p>
+      </details>
+
+      <details>
+        <summary>¿Puedo seguir usando mis paneles actuales?</summary>
+        <p>Si saben abrir una URL, sí: los comandos se ejecutan también por <code>GET</code>.</p>
+      </details>
+
+      <details>
+        <summary>¿Puedo hacerme mi propio panel en vez de usar el editor?</summary>
+        <p>Sí, contra la API HTTP. El editor es la vía cómoda, no una jaula.</p>
+      </details>
+
+      <details>
+        <summary>¿El panel se adapta a cualquier pantalla?</summary>
+        <p>El diseño se dibuja en un lienzo de tamaño fijo y se <em>escala</em> al viewport, que no
+           es lo mismo que un diseño web adaptativo. En la práctica, dibujas para el formato de la
+           tablet que vas a colgar.</p>
+      </details>
+
+      <details>
+        <summary>¿Quién es el dueño de la configuración y de los diseños?</summary>
+        <p>Tú. Son ficheros de texto en tu máquina, y te los llevas cuando quieras.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────── CTA FINAL (§3.14) ──────────────────────── -->
+<section class="section cta-final" id="hablemos" aria-labelledby="hablemos-titulo">
+  <div class="wrap wrap-narrow">
+    <h2 id="hablemos-titulo">Hablemos de tu instalación</h2>
+    <p class="lead">
+      Cuéntame qué sala quieres montar y qué equipos tiene. Te respondo yo, y si encaja te enseño el
+      sistema funcionando de verdad: dando de alta un proyector y dibujando su mando en directo.
+    </p>
+
+    <p class="cta-row">
+      <a class="btn btn-primary" href="mailto:hola@jasodev.es?subject=Demo%20de%20Jasodev&amp;body=Hola%2C%0A%0AQuiero%20montar%3A%20%0AEquipos%20de%20la%20sala%3A%20%0A%0AGracias.">
+        Escríbeme
+      </a>
+      <a class="btn btn-ghost" href="mailto:hola@jasodev.es">hola@jasodev.es</a>
+    </p>
+
+    <p class="fineprint">
+      No hay formulario ni nube: escribes a una persona, y esa persona te contesta.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p>
+      <strong>Jasodev</strong> — control AV dirigido por configuración.
+      <span class="dim">jaso-rc, el servidor de control. front-rc, el diseñador de mandos.</span>
+    </p>
+    <p><a href="mailto:hola@jasodev.es">hola@jasodev.es</a></p>
+  </div>
+</footer>
+
+<script src="/assets/js/nav.js" defer></script>
+</body>
+</html>

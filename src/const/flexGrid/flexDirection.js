@@ -1,6 +1,0 @@
-export const flexDirection = [
-    'flex-row',
-    'flex-row-reverse',
-    'flex-col',
-    'flex-col-reverse',
-]
