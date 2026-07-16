@@ -53,7 +53,8 @@
         "Control publicado como API HTTP con recarga en caliente",
         "Diseñador de mandos táctiles por arrastrar y soltar",
         "Paneles servidos como web, sin app ni licencia por pantalla",
-        "Drivers PJLink, Philips SICP, OSC (Midas M32 / Behringer X32), DALI, TCP/UDP genérico y RS-232",
+        "Drivers PJLink (cualquier proyector Clase 1), Philips SICP, Samsung MDC, OSC (Midas M32 / Behringer X32), DALI, TCP/UDP genérico y RS-232",
+        "Catálogo con audio profesional (Biamp Tesira, QSC Q-SYS) y matrices (Extron SIS, Kramer Protocol 3000)",
         "Configuración en YAML legible y portable"
       ],
       "offers": {
@@ -114,7 +115,7 @@
           "name": "¿Puedo controlar un equipo que no está en la lista?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Casi siempre sí. El catálogo de marcas y modelos lo amplías tú desde la web: creas el modelo, le asignas un driver y escribes sus comandos. Si el equipo habla PJLink o SICP, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y RS-232 mandan la cadena cruda que el equipo entienda. Solo un protocolo verdaderamente nuevo necesita código."
+            "text": "Casi siempre sí. El catálogo de marcas y modelos lo amplías tú desde la web: creas el modelo, le asignas un driver y escribes sus comandos. Si el equipo habla PJLink, SICP o MDC, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y RS-232 mandan la cadena cruda que el equipo entienda. Solo un protocolo verdaderamente nuevo necesita código."
           }
         },
         {
@@ -494,18 +495,29 @@
         <tbody>
           <tr>
             <th scope="row">Proyectores</th>
-            <td><strong>PJLink</strong></td>
-            <td>El estándar de facto: Epson, Panasonic, NEC, Sony…</td>
+            <td><strong>PJLink</strong> Clase 1</td>
+            <td>Cualquier proyector Clase 1 —Epson, NEC, Panasonic, Sony, Christie, Optoma…—
+                con solo dar de alta la IP: encendido, entradas, mutes, lámpara y errores</td>
           </tr>
           <tr>
             <th scope="row">Displays y cartelería</th>
-            <td><strong>Philips SICP</strong></td>
-            <td>Pantallas profesionales Philips</td>
+            <td><strong>Philips SICP</strong> · <strong>Samsung MDC</strong> · <strong>LG</strong> (control externo)</td>
+            <td>Encendido, entradas, volumen y mute, por IP o RS-232</td>
           </tr>
           <tr>
-            <th scope="row">Audio</th>
+            <th scope="row">Audio: mesas</th>
             <td><strong>Midas M32 / Behringer X32</strong> (OSC)</td>
             <td>Faders, mutes, escenas</td>
+          </tr>
+          <tr>
+            <th scope="row">Audio: DSP de sala</th>
+            <td><strong>Biamp Tesira</strong> (TTP) · <strong>QSC Q-SYS</strong> (QRC)</td>
+            <td>Volumen, mute, presets y snapshots — sobre el TCP genérico</td>
+          </tr>
+          <tr>
+            <th scope="row">Matrices</th>
+            <td><strong>Extron SIS</strong> · <strong>Kramer Protocol 3000</strong></td>
+            <td>Ties de vídeo y audio, routing y consultas, por IP o serie</td>
           </tr>
           <tr>
             <th scope="row">Iluminación</th>
@@ -539,6 +551,12 @@
         El soporte DALI está verificado de punta a punta contra pasarela simulada, no todavía contra
         una pasarela física. Lo digo aquí y no en la letra pequeña de un contrato.
       </p>
+      <p class="fineprint">
+        En Biamp, QSC y las matrices, los comandos del catálogo vienen <strong>preparados, no
+        adivinados</strong>: las etiquetas de control —<code>Level1</code>, <code>MainGain</code>,
+        <code>Sala1</code>— las define el integrador en el proyecto de cada sala, y se ajustan al dar
+        de alta el equipo. Vienen escritos; no vienen adivinados.
+      </p>
     </div>
 
     <!-- El catálogo: tipo → marca → modelo, con CRUD desde /ui/catalog -->
@@ -546,12 +564,20 @@
       <div class="split-copy">
         <h3>El catálogo crece contigo</h3>
         <p>
-          El servidor trae un catálogo de <strong>tipo → marca → modelo</strong>. Cuando das de alta
-          un equipo eliges los tres, y el driver, el puerto y los comandos ya vienen puestos: tú
-          solo escribes la IP.
+          El servidor trae un catálogo de <strong>tipo → marca → modelo</strong>: hoy,
+          <strong>15 marcas y 28 modelos</strong> en seis categorías —proyectores, displays, pantallas
+          LED, telas de proyección, audio y matrices—. Cuando das de alta un equipo eliges los tres, y
+          el driver, el puerto y los comandos ya vienen puestos: tú solo escribes la IP.
         </p>
         <p>
-          ¿Un proyector que no está? <strong>Lo añades tú, desde la misma web</strong>, sin tocar un
+          ¿Y tu proyector? <strong>Ya es compatible.</strong> Con PJLink Clase 1 basta la IP: no hay
+          que esperar a que alguien añada tu modelo a una lista. Y la sala entera va por el mismo
+          sitio —fuente → matriz → pantalla, con el DSP de audio incluido—, hablando el protocolo
+          nativo de cada fabricante: PJLink, MDC, SICP, TTP, QRC, SIS, Protocol 3000. Sin cajas
+          propietarias.
+        </p>
+        <p>
+          ¿Un equipo raro que no está? <strong>Lo añades tú, desde la misma web</strong>, sin tocar un
           fichero: creas la marca, creas el modelo, eliges su driver y dejas escritos sus comandos.
           Y se queda ahí <strong>para siempre y para todas tus instalaciones</strong> — el trabajo de
           descifrar un equipo raro se hace una vez, no en cada obra.
@@ -559,7 +585,7 @@
         <p class="fineprint">
           El matiz honesto: <strong>añadir un modelo es un formulario</strong>, y reutiliza uno de
           los drivers de arriba. <strong>Añadir un protocolo nuevo</strong> —uno que no sea PJLink,
-          SICP, OSC, DALI, TCP o serie— sigue siendo un fichero Go. Pero si el equipo habla TCP, UDP
+          SICP, MDC, OSC, DALI, TCP o serie— sigue siendo un fichero Go. Pero si el equipo habla TCP, UDP
           o RS-232, ya se controla hoy con los drivers genéricos: es la cadena cruda que el equipo
           entienda, y esa la pones en el catálogo.
         </p>
@@ -777,7 +803,7 @@
         <summary>¿Puedo controlar un equipo que no está en la lista?</summary>
         <p>Casi siempre sí, y sin esperarme. El catálogo de marcas y modelos lo amplías tú desde la
            web: creas el modelo, le asignas un driver y escribes sus comandos. Si el equipo habla
-           PJLink o SICP, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y
+           PJLink, SICP o MDC, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y
            RS-232 mandan la cadena cruda que el equipo entienda. Solo un protocolo verdaderamente
            nuevo necesita código, y eso es un fichero Go, no un rediseño.</p>
       </details>
