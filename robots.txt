@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jasodev.es/sitemap.xml
+Sitemap: https://www.jasodev.es/sitemap.xml

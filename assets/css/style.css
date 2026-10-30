@@ -1,7 +1,7 @@
 /* =============================================================================
    Jasodev — landing
-   HTML + CSS a mano, sin framework: el panel que vendemos es HTML plano, y esta
-   página no puede contradecirse a sí misma.
+   HTML + CSS a mano, sin framework ni build: una página que carga en un suspiro
+   en cualquier navegador, como los paneles que vende.
 
    PALETA (§6.3): estos son los únicos valores que hay que tocar para heredar la
    identidad de la UI de administración. Sustituye los de :root y los del bloque
@@ -76,7 +76,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }   /* la cabecera fija no tapa el destino de un ancla */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { animation: none !important; transition: none !important; }
@@ -306,10 +306,36 @@ code {
 .lead { font-size: 1.16rem; color: var(--text-muted); max-width: 56ch; }
 .lead strong { color: var(--text); font-weight: 600; }
 
-.hero-note {
-  margin-top: 1.6rem; padding-top: 1.2rem;
+/* La novedad, encima del titular: una línea, enlazada a su sección. */
+.eyebrow { margin: 0 0 1.1rem; font-size: .9rem; }
+.eyebrow a {
+  display: inline-flex; align-items: center; gap: .55rem;
+  padding: .3rem .8rem .3rem .35rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted); text-decoration: none;
+}
+.eyebrow a:hover { border-color: var(--accent); color: var(--text); }
+.pill {
+  padding: .1rem .55rem;
+  border-radius: 999px;
+  background: var(--accent); color: #fff;
+  font-size: .75rem; font-weight: 650; letter-spacing: .02em;
+}
+
+/* Tres hechos que desactivan las tres objeciones de siempre. */
+.hero-facts {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.4rem;
+  margin: 1.6rem 0 0; padding: 1.2rem 0 0;
   border-top: 1px solid var(--border);
-  font-size: .92rem; color: var(--text-faint);
+  list-style: none;
+  font-size: .92rem; color: var(--text-muted);
+}
+.hero-facts li { display: inline-flex; align-items: center; gap: .5rem; }
+.hero-facts li::before {
+  content: ""; width: .5rem; height: .5rem; border-radius: 50%;
+  background: var(--accent); flex: none;
 }
 
 /* ── Capturas ─────────────────────────────────────────────────────────────── */
@@ -327,19 +353,38 @@ code {
   font-size: .88rem; color: var(--text-faint);
 }
 
-/* Marcador de captura pendiente. Se puede borrar con main.js cuando estén las seis. */
-.shot-pending {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: .5rem; padding: 1.5rem; text-align: center;
-  background: repeating-linear-gradient(
-    -45deg, var(--bg-alt), var(--bg-alt) 10px, var(--bg-sunken) 10px, var(--bg-sunken) 20px);
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius);
-  color: var(--text-faint);
+/* Captura de una pantalla de escritorio: una barra de ventana con sus tres puntos dice
+   «esto es software que se usa en el navegador» sin escribirlo. Va en el figure (no en
+   la imagen) para no tocar el alto que reserva el width/height del <img>. */
+.shot-window {
+  position: relative;
+  padding-top: 26px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
-.shot-pending b { color: var(--text-muted); font-size: .9rem; letter-spacing: .04em; text-transform: uppercase; }
-.shot-pending code { font-size: .85rem; }
-.shot-pending span { font-size: .85rem; line-height: 1.5; max-width: 52ch; }
+.shot-window::before {
+  content: ""; position: absolute; top: 9px; left: 12px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #f0605a;
+  box-shadow: 14px 0 0 #f2bd4f, 28px 0 0 #5ac46a;
+}
+.shot.shot-window img { border: 0; border-radius: 0; box-shadow: none; }
+.shot-window figcaption { margin: 0; padding: .6rem .9rem; background: var(--surface); }
+
+/* El panel, en una tablet: un bisel oscuro y redondeado alrededor de la pantalla. */
+.shot-device {
+  padding: clamp(8px, 1.6vw, 14px);
+  background: #07090d;
+  border-radius: clamp(14px, 2.4vw, 26px);
+  box-shadow: var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+.shot.shot-device img { border: 0; border-radius: clamp(6px, 1vw, 10px); box-shadow: none; }
+
+/* Una captura vertical no debe estirarse a todo el ancho de su columna. */
+.shot-narrow { max-width: 420px; justify-self: center; width: 100%; }
 
 /* ── Secciones ────────────────────────────────────────────────────────────── */
 
@@ -431,6 +476,9 @@ code {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 .feature-grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.feature-grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+@media (min-width: 700px) and (max-width: 1060px) { .feature-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.feature-grid-2 { margin-top: 3rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 
 .feature { border-top: 2px solid var(--border-strong); padding-top: 1rem; }
 .feature p { color: var(--text-muted); font-size: .97rem; }
@@ -459,6 +507,21 @@ code {
 }
 .split-even { margin-top: 3rem; gap: 1.25rem; }
 .split-even .pullquote { margin-top: 0; }
+.split-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1020px) { .split-3 { grid-template-columns: minmax(0, 1fr); } }
+
+/* Lo nuevo del diseñador, en su propia caja: texto y captura de la tablet. */
+.split-feature {
+  margin-top: 3rem;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  align-items: center;
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 12px;
+}
+.split-feature h3 { font-size: 1.4rem; }
+.split-feature p { color: var(--text-muted); }
+.split-feature p strong { color: var(--text); }
 
 /* Catálogo: la copia manda, el YAML acompaña. */
 .split-wide { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
