@@ -103,6 +103,7 @@ pre code { background: none; padding: 0; }
 .intro { color: var(--suave); font-size: 1.1rem; max-width: 760px; margin-bottom: 40px; }
 .aclaracion { color: var(--suave); font-size: .9rem; margin-top: 18px; }
 .pequeno { color: var(--suave); font-size: .9rem; }
+.titulo-bloque { font-size: 1.35rem; margin: 48px 0 10px; scroll-margin-top: 80px; }
 
 .fila-funcion { display: grid; grid-template-columns: 5fr 7fr; gap: 48px; align-items: center; margin-bottom: 72px; }
 .fila-funcion.invertida { grid-template-columns: 7fr 5fr; }

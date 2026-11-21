@@ -208,6 +208,32 @@
       </div>
     </div>
     <p class="aclaracion">El conector de diagnóstico suele estar bajo el salpicadero, en el lado del conductor. Una radio no original puede bloquear la línea K: si no conecta, desconéctala para probar.</p>
+
+    <h3 id="bluetooth" class="titulo-bloque">Conectar un ELM327 Bluetooth: emparejar y elegir su puerto COM</h3>
+    <p>Un ELM327 Bluetooth funciona como un <strong>cable serie sin cable</strong>. Cuando lo emparejas, el sistema crea un <strong>puerto serie virtual</strong> (un puerto COM en Windows, <code>/dev/rfcomm0</code> en Linux) y el programa habla con él igual que con un adaptador USB. Por eso en Toledo Diagnosis no se busca «el Bluetooth»: se elige <strong>ese puerto</strong>. Son dos pasos: primero emparejar desde el sistema y después conectar desde el programa.</p>
+    <div class="dos">
+      <div class="tarjeta">
+        <h3>Windows 10 y 11</h3>
+        <ol class="lista-pasos">
+          <li>Enchufa el ELM327 al coche y pon el contacto: se enciende su luz.</li>
+          <li>En <em>Configuración → Bluetooth y dispositivos → Agregar dispositivo → Bluetooth</em>, elige el adaptador (suele llamarse <strong>OBDII</strong>, <strong>OBD2</strong> o <strong>V-LINK</strong>). Si pide PIN, prueba <code>1234</code>, <code>0000</code> o <code>6789</code>.</li>
+          <li>Mira qué puerto le ha dado: <em>Más opciones de Bluetooth → pestaña Puertos COM</em>, el de dirección <strong>Saliente</strong> (por ejemplo, COM5). También sale en <em>Administrador de dispositivos → Puertos (COM y LPT)</em> como «Vínculo serie estándar a través de Bluetooth».</li>
+          <li>En el programa: <em>Conexión</em> ELM327, <em>Puerto</em> ese COM y <em>Conectar</em>. El programa suele preseleccionarlo.</li>
+        </ol>
+        <p class="pequeno">Es normal que Windows lo muestre como «Emparejado» y no como «Conectado»: la conexión se abre al pulsar <em>Conectar</em> en el programa. Si hay dos puertos COM y uno no responde, prueba el otro.</p>
+      </div>
+      <div class="tarjeta">
+        <h3>Linux</h3>
+        <ol class="lista-pasos">
+          <li>Enchufa el ELM327 y pon el contacto.</li>
+          <li>Empareja desde los ajustes de Bluetooth del escritorio o con <code>bluetoothctl</code>: <code>scan on</code>, <code>pair AA:BB:CC:DD:EE:FF</code> y <code>trust AA:BB:CC:DD:EE:FF</code> (la MAC es la que aparece al buscar).</li>
+          <li>Linux no crea el puerto solo. Créalo con <code>sudo rfcomm bind 0 AA:BB:CC:DD:EE:FF</code> y tendrás <code>/dev/rfcomm0</code>. Hay que repetirlo tras reiniciar el ordenador.</li>
+          <li>En el programa: <em>Conexión</em> ELM327, <em>Puerto</em> <code>/dev/rfcomm0</code> y <em>Conectar</em>.</li>
+        </ol>
+        <p class="pequeno">Si no tienes el comando <code>rfcomm</code>: en Fedora instala <code>bluez-deprecated</code>; en Arch, <code>bluez-deprecated-tools</code>. En Debian, Ubuntu y Mint ya viene con <code>bluez</code>.</p>
+      </div>
+    </div>
+    <p class="aclaracion">El ELM327 solo admite una conexión a la vez: si lo has usado con el móvil (Torque, Car Scanner…), cierra esa app o desactiva el Bluetooth del móvil antes de conectar desde el ordenador.</p>
   </div>
 </section>
 
@@ -253,7 +279,7 @@ sudo usermod -aG dialout $USER</code></pre>
     <div class="dos">
       <ol class="pasos pasos-guia">
         <li><span>1</span><div><h3>Pruébalo sin coche</h3><p>Elige el puerto «Simulador (sin coche)», pulsa <em>Conectar</em> y, en la pestaña Panel, <em>Iniciar lectura</em>.</p></div></li>
-        <li><span>2</span><div><h3>Conecta al coche</h3><p>Contacto puesto (para leer averías basta con el motor parado). Enchufa el cable al conector OBD y al portátil, elige <em>Conexión</em> y <em>Puerto</em> y pulsa <em>Conectar</em>. Con KKL tarda de 2 a 6 s; con ELM327, hasta 25 s.</p></div></li>
+        <li><span>2</span><div><h3>Conecta al coche</h3><p>Contacto puesto (para leer averías basta con el motor parado). Enchufa el cable al conector OBD y al portátil, elige <em>Conexión</em> y <em>Puerto</em> y pulsa <em>Conectar</em> (si es Bluetooth, antes <a href="#bluetooth">empareja y busca su puerto COM</a>). Con KKL tarda de 2 a 6 s; con ELM327, hasta 25 s.</p></div></li>
         <li><span>3</span><div><h3>Lee las averías</h3><p>Pestaña <em>Averías → Leer averías</em>. Apúntalas antes de borrar nada.</p></div></li>
         <li><span>4</span><div><h3>Mira los valores</h3><p><em>Panel</em> para el vistazo rápido; <em>Valores medidos</em> para elegir grupos o PIDs y grabar un CSV.</p></div></li>
         <li><span>5</span><div><h3>Pide ayuda a la IA</h3><p>En <em>✦ Asistente IA</em>, guarda tu clave, describe el problema y deja que haga las comprobaciones.</p></div></li>
@@ -291,7 +317,7 @@ sudo usermod -aG dialout $USER</code></pre>
     <details><summary>ELM327: «el vehículo no responde a OBD2»</summary>
       <p>Pon el contacto. Si es un VAG anterior a 2004, probablemente no tenga OBD2 genérico: necesitas el cable KKL.</p></details>
     <details><summary>No encuentro el puerto del ELM327 Bluetooth</summary>
-      <p>En Windows se crean dos puertos COM al emparejarlo: si uno no funciona, prueba el otro. En Linux hay que enlazarlo con <code>sudo rfcomm bind 0 &lt;MAC&gt;</code> y elegir <code>/dev/rfcomm0</code>.</p></details>
+      <p>El Bluetooth no se elige directamente: al emparejarlo, el sistema crea un puerto serie y ese es el que se selecciona (<a href="#bluetooth">paso a paso</a>). En Windows se crean dos puertos COM al emparejarlo: si uno no funciona, prueba el otro. En Linux hay que enlazarlo con <code>sudo rfcomm bind 0 &lt;MAC&gt;</code> y elegir <code>/dev/rfcomm0</code>.</p></details>
     <details><summary>Linux: «Permission denied» al conectar</summary>
       <p>Tu usuario debe estar en el grupo del puerto serie: <code>sudo usermod -aG dialout $USER</code> (en Arch, <code>uucp</code>) y volver a iniciar sesión. El propio programa te dice el comando exacto.</p></details>
     <details><summary>Linux (Ubuntu/Mint): el cable no aparece como /dev/ttyUSB0</summary>
