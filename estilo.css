@@ -1,0 +1,202 @@
+/* Toledo Diagnosis · mismos colores que el programa (docs/PROYECTO.md §7.5) */
+:root {
+  --fondo: #111418;
+  --panel: #181c22;
+  --tarjeta: #1f242c;
+  --tarjeta2: #262c36;
+  --pista: #2f3642;
+  --texto: #e8ebf0;
+  --suave: #8a93a2;
+  --acento: #ff7a29;
+  --azul: #4aa8ff;
+  --ok: #3ccf7a;
+  --aviso: #f5b83d;
+  --error: #ef5350;
+  --radio: 10px;
+  --fuente: "Segoe UI", "Noto Sans", Cantarell, Ubuntu, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: Consolas, "Noto Sans Mono", "DejaVu Sans Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 17px/1.6 var(--fuente);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--azul); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+h2 { font-size: clamp(1.7rem, 3.5vw, 2.3rem); }
+h3 { font-size: 1.15rem; }
+p { margin: 0 0 1em; }
+code, pre { font-family: var(--mono); font-size: .9em; }
+code { background: var(--pista); padding: .1em .35em; border-radius: 4px; }
+pre { background: var(--fondo); border: 1px solid var(--pista); border-radius: 8px; padding: 14px 16px; overflow-x: auto; line-height: 1.5; }
+pre code { background: none; padding: 0; }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+.contenedor { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.contenedor-estrecho { max-width: 820px; }
+.acento { color: var(--acento); }
+
+/* ---- cabecera ---- */
+.cabecera {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(17, 20, 24, .92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--tarjeta);
+}
+.cabecera-fila { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.marca { display: flex; align-items: center; gap: 10px; color: var(--texto); font-weight: 700; font-size: 1.05rem; }
+.marca:hover { text-decoration: none; }
+.marca img { border-radius: 7px; }
+.menu { display: flex; align-items: center; gap: 22px; }
+.menu a { color: var(--suave); font-size: .95rem; }
+.menu a:hover { color: var(--texto); text-decoration: none; }
+.menu-boton { display: none; background: none; border: 0; color: var(--texto); font-size: 1.5rem; cursor: pointer; }
+
+/* ---- botones ---- */
+.botones { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 28px 0 14px; }
+.boton {
+  display: inline-block; padding: 12px 22px; border-radius: 8px;
+  font-weight: 600; font-size: 1rem; border: 1px solid transparent; transition: background .15s, border-color .15s;
+}
+.boton:hover { text-decoration: none; }
+.boton-principal { background: var(--acento); color: #111418; }
+.boton-principal:hover { background: #ff8f4d; }
+.boton-secundario { background: var(--tarjeta2); color: var(--texto); border-color: var(--pista); }
+.boton-secundario:hover { border-color: var(--suave); }
+.menu a.boton-secundario { color: var(--texto); }
+.boton-peque { padding: 6px 14px; font-size: .9rem; }
+
+/* ---- portada ---- */
+.portada { text-align: center; padding: 72px 0 40px; background: radial-gradient(ellipse at top, #1f242c 0%, var(--fondo) 60%); }
+.portada h1 { font-size: clamp(2.2rem, 6vw, 3.8rem); letter-spacing: -.02em; }
+.entradilla { font-size: clamp(1.05rem, 2vw, 1.25rem); color: var(--suave); max-width: 720px; margin: 0 auto; }
+.etiqueta { color: var(--acento); font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px; }
+.nota-version { color: var(--suave); font-size: .9rem; }
+.captura.captura-portada { margin: 40px auto 48px; max-width: 1100px; }
+.tres { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+.dos { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+/* ---- tarjetas ---- */
+.tarjeta { background: var(--tarjeta); border: 1px solid var(--tarjeta2); border-radius: var(--radio); padding: 22px 24px; }
+.tarjeta p:last-child { margin-bottom: 0; }
+.tarjeta h3 { color: var(--texto); }
+.tarjeta-grande { padding: 28px; }
+.tarjeta-grande .boton { margin: 6px 0 16px; }
+.tarjeta .etiqueta { margin-bottom: 6px; }
+
+/* ---- capturas ---- */
+.captura { margin: 0; }
+.captura img { border-radius: var(--radio); border: 1px solid var(--pista); box-shadow: 0 18px 50px rgba(0, 0, 0, .45); }
+.captura a { display: block; cursor: zoom-in; }
+.captura figcaption { color: var(--suave); font-size: .9rem; margin-top: 10px; text-align: center; }
+
+/* ---- secciones ---- */
+.seccion { padding: 88px 0; }
+.seccion-alterna { background: var(--panel); border-top: 1px solid var(--tarjeta); border-bottom: 1px solid var(--tarjeta); }
+.intro { color: var(--suave); font-size: 1.1rem; max-width: 760px; margin-bottom: 40px; }
+.aclaracion { color: var(--suave); font-size: .9rem; margin-top: 18px; }
+.pequeno { color: var(--suave); font-size: .9rem; }
+
+.fila-funcion { display: grid; grid-template-columns: 5fr 7fr; gap: 48px; align-items: center; margin-bottom: 72px; }
+.fila-funcion.invertida { grid-template-columns: 7fr 5fr; }
+.fila-funcion.invertida .texto-funcion { order: 2; }
+.texto-funcion h3 { font-size: 1.5rem; }
+.texto-funcion p { color: #c5cbd5; }
+
+.selector { display: inline-flex; background: var(--tarjeta); border: 1px solid var(--pista); border-radius: 8px; padding: 3px; margin-top: 6px; }
+.selector button {
+  background: none; border: 0; color: var(--suave); padding: 7px 16px; border-radius: 6px;
+  font: 600 .9rem var(--fuente); cursor: pointer;
+}
+.selector button[aria-selected="true"] { background: var(--pista); color: var(--texto); }
+
+.extras { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; list-style: none; padding: 0; margin: 0; }
+.extras li { padding-left: 22px; position: relative; color: #c5cbd5; }
+.extras li::before { content: "●"; color: var(--acento); position: absolute; left: 0; font-size: .7em; top: .45em; }
+
+/* ---- pasos ---- */
+.pasos { list-style: none; padding: 0; margin: 0 0 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.pasos li { display: flex; gap: 14px; }
+.pasos li > span {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  background: var(--acento); color: #111418; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.pasos h3 { font-size: 1.05rem; margin: 4px 0 6px; }
+.pasos p { color: var(--suave); font-size: .95rem; margin: 0; }
+.pasos-guia { grid-template-columns: 1fr; gap: 22px; }
+
+.dos-capturas { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.seccion-alterna .tres { margin-top: 40px; }
+
+.aviso {
+  margin-top: 28px; padding: 18px 22px; border-radius: var(--radio);
+  background: rgba(245, 184, 61, .08); border: 1px solid rgba(245, 184, 61, .35); color: #eadbb8;
+}
+.aviso strong { color: var(--aviso); }
+
+/* ---- listas ---- */
+.lista-ok, .lista-no { list-style: none; padding: 0; margin: 0 0 14px; }
+.lista-ok li, .lista-no li { position: relative; padding-left: 26px; margin-bottom: 8px; color: #c5cbd5; }
+.lista-ok li::before { content: "✓"; color: var(--ok); position: absolute; left: 0; font-weight: 700; }
+.lista-no li::before { content: "✕"; color: var(--error); position: absolute; left: 0; font-weight: 700; }
+.lista-pasos { padding-left: 20px; color: #c5cbd5; }
+.lista-pasos li { margin-bottom: 8px; }
+
+/* ---- tabla ---- */
+.tabla { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.tabla th { text-align: left; color: var(--suave); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid var(--pista); }
+.tabla td { padding: 10px; border-bottom: 1px solid var(--tarjeta2); vertical-align: top; color: #c5cbd5; }
+.tabla td:first-child { font-family: var(--mono); color: var(--acento); font-weight: 600; }
+
+/* ---- FAQ ---- */
+details { background: var(--tarjeta); border: 1px solid var(--tarjeta2); border-radius: 8px; margin-bottom: 10px; }
+summary { cursor: pointer; padding: 16px 20px; font-weight: 600; list-style: none; position: relative; padding-right: 44px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--acento); font-size: 1.3rem; }
+details[open] summary::after { content: "−"; }
+details p { padding: 0 20px 6px; color: #c5cbd5; }
+
+/* ---- pie ---- */
+.pie { border-top: 1px solid var(--tarjeta); padding: 40px 0; color: var(--suave); font-size: .9rem; }
+.pie .legal { font-size: .82rem; max-width: 900px; }
+
+/* ---- visor de capturas ---- */
+#visor { padding: 0; border: 0; background: transparent; max-width: 96vw; max-height: 96vh; }
+#visor::backdrop { background: rgba(0, 0, 0, .85); }
+#visor img { max-width: 96vw; max-height: 92vh; border-radius: 8px; }
+.visor-cerrar {
+  position: fixed; top: 16px; right: 20px; background: var(--tarjeta2); color: var(--texto);
+  border: 1px solid var(--pista); border-radius: 50%; width: 40px; height: 40px; font-size: 1.1rem; cursor: pointer;
+}
+
+/* ---- móvil ---- */
+@media (max-width: 960px) {
+  .tres, .pasos { grid-template-columns: 1fr 1fr; }
+  .fila-funcion, .fila-funcion.invertida { grid-template-columns: 1fr; gap: 24px; }
+  .fila-funcion.invertida .texto-funcion { order: 0; }
+}
+@media (max-width: 760px) {
+  body { font-size: 16px; }
+  .menu-boton { display: block; }
+  .menu {
+    display: none; position: absolute; top: 60px; left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--panel); border-bottom: 1px solid var(--tarjeta); padding: 8px 24px 16px;
+  }
+  .menu.abierto { display: flex; }
+  .menu a { padding: 10px 0; }
+  .menu a.boton-secundario { text-align: center; margin-top: 8px; padding: 10px; }
+  .tres, .pasos, .dos, .dos-capturas, .extras { grid-template-columns: 1fr; }
+  .seccion { padding: 64px 0; }
+  .portada { padding-top: 48px; }
+  .botones .boton { width: 100%; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

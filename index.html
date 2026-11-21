@@ -1,946 +1,341 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Control AV sin programar: proyectores, cámaras y luces | Jasodev</title>
-<meta name="description" content="Das de alta el equipo desde el navegador y su control se publica solo. El mando táctil lo dibujas arrastrando. Sin licencia por pantalla, sin nube y sin hardware propietario.">
-<link rel="canonical" href="https://www.jasodev.es/">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<meta name="author" content="Jasodev">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-
-<!-- Open Graph. La imagen que gana es el panel funcionando: es lo que el cliente cuelga. -->
+<title>Toledo Diagnosis · Diagnóstico de tu coche desde el portátil</title>
+<meta name="description" content="Programa gratuito para Windows y Linux: lee averías y valores en directo de coches VAG antiguos con cable KKL (KW1281) y de cualquier coche OBD2 con ELM327, con un asistente de IA que hace las comprobaciones por ti.">
+<meta name="keywords" content="diagnosis OBD2 portátil, KW1281, cable KKL 409.1, VAG-COM, EDC15, SEAT Toledo TDI, 1.9 TDI averías, ELM327 Bluetooth, lector OBD2 gratis, diagnóstico con IA, Linux OBD2">
+<meta name="theme-color" content="#111418">
+<link rel="icon" type="image/png" href="img/icono.png">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Toledo Diagnosis · Diagnóstico de tu coche desde el portátil">
+<meta property="og:description" content="Averías, valores en directo y un asistente de IA que hace las comprobaciones por ti. Para VAG antiguos con cable KKL y cualquier coche con OBD2.">
+<meta property="og:image" content="https://www.jasodev.es/img/og.jpg">
 <meta property="og:url" content="https://www.jasodev.es/">
-<meta property="og:site_name" content="Jasodev">
-<meta property="og:title" content="Control AV sin programar la instalación">
-<meta property="og:description" content="Das de alta el equipo. El control se publica solo. El mando lo dibujas tú.">
-<meta property="og:image" content="https://www.jasodev.es/assets/img/og-panel.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Panel táctil de una sala de reuniones hecho con Jasodev: proyector, monitor, cámara PTZ con presets, luz y sonido.">
+<link rel="canonical" href="https://www.jasodev.es/">
 <meta name="twitter:card" content="summary_large_image">
-
-<!-- Marca que hay JS antes de pintar: sin esto el menú móvil se plegaría aunque
-     nada pudiera desplegarlo. Va aquí, en línea, para que no parpadee. -->
-<script>document.documentElement.classList.add("js");</script>
-
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<link rel="preload" as="image" fetchpriority="high"
-      href="/assets/img/editor-lienzo-1200.webp"
-      imagesrcset="/assets/img/editor-lienzo-800.webp 800w, /assets/img/editor-lienzo-1200.webp 1200w, /assets/img/editor-lienzo-1600.webp 1600w"
-      imagesizes="(max-width: 960px) calc(100vw - 48px), 640px">
-<link rel="stylesheet" href="/assets/css/style.css">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://www.jasodev.es/#software",
-      "name": "Jasodev",
-      "applicationCategory": "BusinessApplication",
-      "applicationSubCategory": "Control audiovisual",
-      "operatingSystem": "Ubuntu Server (Linux)",
-      "url": "https://www.jasodev.es/",
-      "image": "https://www.jasodev.es/assets/img/og-panel.png",
-      "screenshot": "https://www.jasodev.es/assets/img/editor-lienzo-1600.webp",
-      "inLanguage": "es",
-      "description": "Sistema de control AV dirigido por configuración: das de alta el equipo desde el navegador y su control se publica como API HTTP. El mando táctil se dibuja arrastrando, sin programar y sin licencia por pantalla.",
-      "featureList": [
-        "Alta de equipos desde un formulario web, sin programar",
-        "Control publicado como API HTTP con recarga en caliente",
-        "Diseñador de mandos táctiles sobre un lienzo, con cualquier elemento enlazado a una función del equipo",
-        "Escenas (macros) que encienden o apagan la sala de un toque",
-        "Mantener pulsado para grabar presets de cámara y soltar para detener el movimiento PTZ",
-        "Estado de los equipos compartido entre todas las tablets",
-        "Tablets emparejadas con código de un solo uso y credencial revocable",
-        "Drivers PJLink (cualquier proyector Clase 1), Philips SICP, Samsung MDC, OSC (Midas M32 / Behringer X32), DALI, TCP/UDP genérico y RS-232",
-        "Catálogo con audio profesional (Biamp Tesira, QSC Q-SYS) y matrices (Extron SIS, Kramer Protocol 3000)"
-      ],
-      "publisher": { "@id": "https://www.jasodev.es/#organizacion" }
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://www.jasodev.es/#organizacion",
-      "name": "Jasodev",
-      "url": "https://www.jasodev.es/",
-      "logo": "https://www.jasodev.es/assets/img/apple-touch-icon.png",
-      "email": "hola@jasodev.es",
-      "description": "Control AV dirigido por configuración: jaso-rc, el servidor de control, y jaso-panel, el diseñador de mandos y los paneles de las tablets."
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://www.jasodev.es/#web",
-      "url": "https://www.jasodev.es/",
-      "name": "Jasodev",
-      "inLanguage": "es",
-      "publisher": { "@id": "https://www.jasodev.es/#organizacion" }
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://www.jasodev.es/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Necesito saber programar?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. Das de alta el equipo en un formulario y dibujas el mando arrastrando. No hay entorno de desarrollo que instalar ni certificación que sacarse." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Y si se cae el servidor?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Los dos programas son servicios systemd que rearrancan solos. Y los equipos conservan su estado físico: una sala encendida no se apaga porque el control se reinicie." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Funciona sin internet?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Todo funciona en la red local. No hay nube, no hace falta ninguna cuenta y el sistema no envía datos a servidores externos." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo controlar un equipo que no está en la lista?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Casi siempre sí, y sin esperarme. El catálogo de marcas y modelos lo amplías tú desde la web: creas el modelo, le asignas un driver y escribes sus comandos. Si el equipo habla PJLink, SICP o MDC, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y RS-232 mandan la cadena cruda que el equipo entienda. Solo un protocolo verdaderamente nuevo necesita código, y eso es un fichero Go, no un rediseño." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo grabar los presets de una cámara desde la tablet?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Un botón puede tener una acción al tocarlo y otra al mantenerlo pulsado: toque para ir al preset, dos segundos para guardarlo. Al cumplirse el tiempo salta un aviso, así sabes cuándo soltar. Las flechas de la cámara mueven mientras las pulsas y paran al soltar." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cuántas tablets puedo colgar?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Las que quieras. No se cuentan dispositivos ni se licencian pantallas: cada tablet se empareja con un código y abre su panel en el navegador." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Qué pasa si se llevan una tablet?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Revocas su credencial desde el editor y deja de valer. La tablet nunca guarda la llave de la instalación: solo puede pulsar los botones de su propio panel." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo seguir usando mis paneles actuales?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Si saben abrir una URL, sí: los comandos de jaso-rc se ejecutan también por GET." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo hacerme mi propio panel en vez de usar el editor?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Sí, contra la API HTTP. El editor es la vía cómoda, no una jaula." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿El panel se adapta a cualquier pantalla?",
-          "acceptedAnswer": { "@type": "Answer", "text": "El diseño se dibuja en un lienzo de tamaño fijo y se escala a la pantalla, que no es lo mismo que un diseño web adaptativo. En la práctica, dibujas para el formato de la tablet que vas a colgar." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Quién es el dueño de la configuración y de los diseños?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Tú. La instalación es un YAML legible y los paneles una base de datos SQLite con sus imágenes, todo en tu máquina. Te lo llevas cuando quieras." }
-        }
-      ]
-    }
-  ]
-}
-</script>
+<link rel="stylesheet" href="estilo.css">
 </head>
-
 <body>
-<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-<header class="site-header">
-  <div class="wrap header-row">
-    <a class="brand" href="/" aria-label="Jasodev, inicio">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-name">Jasodev</span>
-    </a>
-
-    <!-- Sin JavaScript los enlaces se ven, repartidos en dos filas: la clase .js
-         del <html> es la que autoriza a plegarlos en un menú. Nunca se esconde
-         una navegación que luego nadie pueda abrir. -->
-    <nav class="nav" aria-label="Principal">
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
-        <span class="burger" aria-hidden="true"></span>
-        <span class="nav-toggle-label">Menú</span>
-      </button>
-
-      <ul class="nav-links" id="nav-links" role="list">
-        <li><a href="#como-funciona">Cómo funciona</a></li>
-        <li><a href="#disenador">El diseñador</a></li>
-        <li><a href="#compatibilidad">Compatibilidad</a></li>
-        <li><a href="#seguridad">Seguridad</a></li>
-        <li><a href="#faq">Preguntas</a></li>
-      </ul>
-
-      <a class="btn btn-primary btn-small" href="#hablemos">Pedir una demo</a>
+<header class="cabecera">
+  <div class="contenedor cabecera-fila">
+    <a class="marca" href="#inicio"><img src="img/icono.png" alt="" width="32" height="32"> Toledo Diagnosis</a>
+    <button class="menu-boton" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">☰</button>
+    <nav id="menu" class="menu">
+      <a href="#funciones">Funciones</a>
+      <a href="#ia">Asistente IA</a>
+      <a href="#hardware">Qué cable</a>
+      <a href="#descargar">Descargar</a>
+      <a href="#guia">Guía</a>
+      <a href="#faq">Problemas</a>
+      <a class="boton boton-secundario boton-peque" href="https://github.com/jaso69/obd2">GitHub</a>
     </nav>
   </div>
 </header>
 
-<main id="contenido" tabindex="-1">
+<main>
 
-<!-- ─────────────────────────── HERO ─────────────────────────── -->
-<section class="hero" aria-labelledby="hero-titulo">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p class="eyebrow">
-        <a href="#mando-fisico"><span class="pill">Nuevo</span> Presets de cámara con mantener pulsado</a>
-      </p>
-      <h1 id="hero-titulo">Control AV sin programar la instalación.</h1>
-      <p class="lead">
-        Das de alta el proyector desde el navegador y su control queda publicado al instante.
-        Dibujas el mando en un lienzo y lo abres en una tablet.
-        <strong>Sin recompilar, sin volver a la obra.</strong>
-      </p>
-
-      <p class="cta-row">
-        <a class="btn btn-primary" href="#hablemos">Pedir una demo</a>
-        <a class="btn btn-ghost" href="#como-funciona">Ver cómo funciona</a>
-      </p>
-
-      <ul class="hero-facts" role="list">
-        <li>Dos programas en un mini-PC con Ubuntu</li>
-        <li>Sin licencia por pantalla</li>
-        <li>Sin nube ni cuentas</li>
-      </ul>
+<!-- ============ INICIO ============ -->
+<section id="inicio" class="portada">
+  <div class="contenedor">
+    <p class="etiqueta">Gratis · Código abierto (MIT) · Windows y Linux</p>
+    <h1>Diagnóstico de tu coche<br><span class="acento">desde el portátil</span></h1>
+    <p class="entradilla">Averías, valores en directo y un asistente de IA que hace las comprobaciones por ti.
+      Para VAG antiguos con cable KKL y para cualquier coche con OBD2.</p>
+    <div class="botones">
+      <a class="boton boton-principal" data-descarga="windows" href="https://github.com/jaso69/obd2/releases">⬇ Descargar para Windows</a>
+      <a class="boton boton-principal" data-descarga="linux" href="https://github.com/jaso69/obd2/releases">⬇ Descargar para Linux</a>
+      <a class="boton boton-secundario" href="https://github.com/jaso69/obd2">Ver en GitHub</a>
     </div>
-
-    <figure class="hero-shot shot shot-window">
-      <img src="/assets/img/editor-lienzo-1200.webp"
-           srcset="/assets/img/editor-lienzo-800.webp 800w, /assets/img/editor-lienzo-1200.webp 1200w, /assets/img/editor-lienzo-1600.webp 1600w"
-           sizes="(max-width: 960px) calc(100vw - 48px), 640px"
-           width="1600" height="1000" fetchpriority="high" decoding="async"
-           alt="El diseñador de mandos: en el centro, el lienzo con el panel de una sala de reuniones —proyector, monitor, cámara PTZ, luz y sonido—; a la derecha, las propiedades de la flecha de la cámara seleccionada y la función que tiene asociada.">
-      <figcaption>El diseñador. Colocas el elemento y le asocias cualquier función que publique el equipo.</figcaption>
+    <p class="nota-version" id="nota-version">Versión preliminar: probada a fondo con simuladores, todavía no con un coche real. <a href="#estado">Más detalles</a>.</p>
+    <figure class="captura captura-portada">
+      <a href="img/panel-kkl.webp" class="ampliar"><img src="img/panel-kkl.webp" width="1995" height="1200"
+        alt="Panel del programa conectado a una centralita VAG: relojes de régimen, caudal, turbo y refrigerante, y gráficas de presión de turbo y masa de aire"></a>
     </figure>
+    <div class="tres">
+      <div class="tarjeta">
+        <h3>VAG antiguos por KKL</h3>
+        <p>Habla <strong>KW1281</strong>, el protocolo de SEAT, VW, Audi y Skoda hasta ~2004, que un lector OBD2 normal no entiende. Pensado para el 1.9 TDI con EDC15.</p>
+      </div>
+      <div class="tarjeta">
+        <h3>Cualquier OBD2 con ELM327</h3>
+        <p>Con un ELM327 USB o Bluetooth lee averías P0xxx, el testigo MIL, el VIN y decenas de valores de cualquier coche con OBD2/EOBD.</p>
+      </div>
+      <div class="tarjeta">
+        <h3>Un asistente que comprueba</h3>
+        <p>Cuéntale el síntoma: la IA <strong>lee ella misma</strong> las averías y los valores, te pide que arranques o aceleres y te da un diagnóstico razonado.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ─────────────────────── EL PROBLEMA ─────────────────────── -->
-<section class="section" id="problema" aria-labelledby="problema-titulo">
-  <div class="wrap">
-    <h2 id="problema-titulo">Lo que hoy cuesta una visita a obra</h2>
-    <p class="section-intro">
-      Cinco cosas que un integrador AV da por perdidas porque siempre han sido así.
-    </p>
+<!-- ============ FUNCIONES ============ -->
+<section id="funciones" class="seccion">
+  <div class="contenedor">
+    <h2>Todo lo que hace</h2>
+    <p class="intro">Una interfaz oscura y clara, con las mismas pestañas para los dos tipos de conexión. Todas las capturas son del programa real conectado a su simulador.</p>
 
-    <ul class="cards cards-5" role="list">
-      <li class="card">
-        <h3>Cada cambio es programar</h3>
-        <p>Añadir un proyector o mover un botón significa abrir el entorno del fabricante,
-           escribir código, compilar y subir. Un cambio de cinco minutos se convierte en un
-           desplazamiento.</p>
-      </li>
-      <li class="card">
-        <h3>Dependes del fabricante</h3>
-        <p>Herramienta propietaria, certificación, licencia por procesador. Un ecosistema del que
-           no se sale.</p>
-      </li>
-      <li class="card">
-        <h3>El cliente no puede tocar nada</h3>
-        <p>Todo pasa por ti, incluso lo trivial. Y lo trivial es la mayoría de las llamadas.</p>
-      </li>
-      <li class="card">
-        <h3>No sabes qué hay montado</h3>
-        <p>La configuración vive dentro de un programa compilado, no en algo que se pueda abrir y
-           leer.</p>
-      </li>
-      <li class="card card-accent">
-        <h3>El mando es lo más caro y lo más rígido</h3>
-        <p>Panel táctil propietario, licencia por pantalla, y mover un botón de sitio es un ticket.
-           Y el cliente <em>siempre</em> quiere mover un botón de sitio.</p>
-      </li>
+    <div class="fila-funcion">
+      <div class="texto-funcion">
+        <h3>Panel en directo</h3>
+        <p>Relojes y gráficas de los últimos 60 segundos. Con el cable KKL ves régimen, caudal inyectado, presión de turbo frente a la teórica, masa de aire, ciclo de la N75 y de la EGR. Con un ELM327, régimen, velocidad, temperaturas, carga, caudalímetro, mariposa y tensión.</p>
+        <div class="selector" role="tablist" data-grupo="panel">
+          <button role="tab" aria-selected="true" data-img="img/panel-kkl.webp" data-alt="Panel en modo KKL con turbo y masa de aire">KKL · VAG</button>
+          <button role="tab" aria-selected="false" data-img="img/panel-obd.webp" data-alt="Panel en modo OBD2 con régimen, velocidad, refrigerante y carga">ELM327 · OBD2</button>
+        </div>
+      </div>
+      <figure class="captura"><a href="img/panel-kkl.webp" class="ampliar" data-grupo="panel"><img src="img/panel-kkl.webp" width="1995" height="1200" loading="lazy" alt="Panel en modo KKL con turbo y masa de aire"></a></figure>
+    </div>
+
+    <div class="fila-funcion invertida">
+      <div class="texto-funcion">
+        <h3>Valores medidos y grabación</h3>
+        <p>Elige los grupos de valores medidos VAG (001 inyección, 003 caudalímetro y EGR, 011 turbo…) o los PIDs OBD2 que tu coche soporta, y míralos en una tabla en directo.</p>
+        <p><strong>Grabar CSV</strong> guarda cada lectura con su tiempo para analizarla después en Excel o LibreOffice.</p>
+      </div>
+      <figure class="captura"><a href="img/valores-kkl.webp" class="ampliar"><img src="img/valores-kkl.webp" width="1995" height="1200" loading="lazy" alt="Tabla de valores medidos de los grupos 001, 003 y 011 mientras se graba un CSV"></a></figure>
+    </div>
+
+    <div class="fila-funcion">
+      <div class="texto-funcion">
+        <h3>Averías</h3>
+        <p>Códigos VAG de 5 cifras con el componente, el tipo de fallo y si es intermitente. En OBD2, averías memorizadas y pendientes con su descripción y el estado del testigo MIL.</p>
+        <p>Puedes borrarlas (siempre pide confirmación). Recuerda: borrar un código no repara la avería.</p>
+        <div class="selector" role="tablist" data-grupo="averias">
+          <button role="tab" aria-selected="true" data-img="img/averias-kkl.webp" data-alt="Averías VAG 00553 y 01262 intermitente">KKL · VAG</button>
+          <button role="tab" aria-selected="false" data-img="img/averias-obd.webp" data-alt="Averías OBD2 P0171, P0420 y P0301 pendiente con el testigo MIL encendido">ELM327 · OBD2</button>
+        </div>
+      </div>
+      <figure class="captura"><a href="img/averias-kkl.webp" class="ampliar" data-grupo="averias"><img src="img/averias-kkl.webp" width="1995" height="1200" loading="lazy" alt="Averías VAG 00553 y 01262 intermitente"></a></figure>
+    </div>
+
+    <div class="fila-funcion invertida">
+      <div class="texto-funcion">
+        <h3>Vehículo y otros módulos</h3>
+        <p>Identificación de la centralita (referencia, software, codificación) o, en OBD2, el VIN, el protocolo, la tensión de batería y el estándar.</p>
+        <p>Con el cable KKL también puedes entrar en otras centralitas: cambio automático, ABS, Climatronic, airbag, cuadro de instrumentos, cierre centralizado y radio.</p>
+      </div>
+      <figure class="captura"><a href="img/vehiculo-kkl.webp" class="ampliar"><img src="img/vehiculo-kkl.webp" width="1995" height="1200" loading="lazy" alt="Identificación de la centralita del motor"></a></figure>
+    </div>
+
+    <ul class="extras">
+      <li><strong>Simulador incluido</strong>: prueba todo sin coche eligiendo el puerto «Simulador (sin coche)».</li>
+      <li><strong>Un solo archivo</strong>: no hay que instalar Python ni nada más.</li>
+      <li><strong>Registro</strong> de toda la comunicación, con modo de depuración, por si algo falla.</li>
+      <li><strong>Sesión estable</strong>: mantiene viva la conexión KW1281 y avisa si se pierde.</li>
     </ul>
   </div>
 </section>
 
-<!-- ────────────────────── CÓMO FUNCIONA ────────────────────── -->
-<section class="section section-alt" id="como-funciona" aria-labelledby="como-funciona-titulo">
-  <div class="wrap">
-    <h2 id="como-funciona-titulo">Das de alta el equipo. El control se publica solo. El mando lo dibujas tú.</h2>
-    <p class="section-intro">
-      Cuatro pasos, y en ninguno se escribe una línea de código.
-    </p>
+<!-- ============ IA ============ -->
+<section id="ia" class="seccion seccion-alterna">
+  <div class="contenedor">
+    <h2>✦ Asistente IA: diagnóstico guiado</h2>
+    <p class="intro">No es un chat que adivina: el asistente usa el programa para comprobar sus hipótesis con datos de tu coche.</p>
 
-    <ol class="steps" role="list">
-
-      <li class="step">
-        <div class="step-copy">
-          <span class="step-num" aria-hidden="true">1</span>
-          <h3>Das de alta el equipo</h3>
-          <p>Eliges tipo → marca → modelo en el catálogo, y el driver, el puerto y los comandos ya
-             vienen puestos. Tú pones la IP.</p>
-        </div>
-        <figure class="shot shot-window">
-          <img src="/assets/img/alta-equipo-1200.webp" width="1200" height="626" loading="lazy" decoding="async"
-               alt="Formulario de alta de un equipo en jaso-rc: los desplegables de tipo, marca y modelo ya han rellenado el driver PJLink y el puerto, y solo queda escribir la dirección IP del proyector.">
-        </figure>
-      </li>
-
-      <li class="step">
-        <div class="step-copy">
-          <span class="step-num" aria-hidden="true">2</span>
-          <h3>El control se publica solo</h3>
-          <p>Aparecen los endpoints HTTP de cada equipo y de cada escena, listos para llamar. Sin
-             recompilar y sin reiniciar el servicio: la configuración se recarga en caliente.</p>
-        </div>
-        <figure class="shot shot-window">
-          <img src="/assets/img/endpoints-1200.webp" width="1200" height="626" loading="lazy" decoding="async"
-               alt="Página de endpoints de jaso-rc: 61 rutas HTTP generadas a partir de los equipos configurados, con las generales y las de las escenas «Encender sala» y «Apagar sala».">
-        </figure>
-      </li>
-
-      <li class="step">
-        <div class="step-copy">
-          <span class="step-num" aria-hidden="true">3</span>
-          <h3>Dibujas el mando</h3>
-          <p>Colocas botones, sliders, iconos, imágenes y textos en un lienzo, y a cualquiera le
-             asocias una función del equipo. Los comandos salen del propio servidor, no de tu
-             memoria.</p>
-        </div>
-        <figure class="shot shot-window shot-narrow">
-          <img src="/assets/img/asociar-funcion.webp" width="720" height="880" loading="lazy" decoding="async"
-               alt="La flecha hacia arriba de la cámara seleccionada en el lienzo y, en el inspector, su función asociada: servidor, equipo «camara-ptz» y la lista de comandos que publica la cámara, con «tilt_up» elegido.">
-        </figure>
-      </li>
-
-      <li class="step">
-        <div class="step-copy">
-          <span class="step-num" aria-hidden="true">4</span>
-          <h3>Lo cuelgas en la pared</h3>
-          <p>Emparejas la tablet con un código de un solo uso y abre el panel en su navegador. Sin
-             app, sin tienda de aplicaciones y sin licencia por pantalla. Lo que cambies en el
-             editor le llega solo, en menos de un minuto.</p>
-        </div>
-        <figure class="shot shot-device">
-          <img src="/assets/img/panel-tablet-1280.webp"
-               srcset="/assets/img/panel-tablet-800.webp 800w, /assets/img/panel-tablet-1280.webp 1280w"
-               sizes="(max-width: 860px) calc(100vw - 48px), 680px"
-               width="1280" height="800" loading="lazy" decoding="async"
-               alt="El panel de la sala de reuniones en la tablet: escenas «Encender sala» y «Apagar sala», botones del proyector y del monitor, la cámara PTZ con flechas, zoom y tres presets, y los sliders de luz y volumen.">
-        </figure>
-      </li>
-
+    <ol class="pasos">
+      <li><span>1</span><div><h3>Cuéntale qué le pasa</h3><p>«Le falta potencia al acelerar y echa humo negro». O pulsa <em>Analizar averías del vehículo</em>.</p></div></li>
+      <li><span>2</span><div><h3>Comprueba por su cuenta</h3><p>Lee las averías y los grupos o PIDs que importan, con series de lecturas durante un acelerón o un calentamiento.</p></div></li>
+      <li><span>3</span><div><h3>Te pide ayuda cuando hace falta</h3><p>«Arranca el motor y da un acelerón en vacío». Pulsas <em>Hecho</em> o <em>No puedo</em> y sigue.</p></div></li>
+      <li><span>4</span><div><h3>Diagnóstico razonado</h3><p>Causas por orden de probabilidad con la evidencia, qué hacer de lo más barato a lo más caro y si puedes circular.</p></div></li>
     </ol>
 
-    <figure class="diagram">
-      <pre role="img" aria-label="Diagrama: la tablet habla por HTTP con jaso-panel, que diseña, sirve el panel y guarda el token; jaso-panel habla por HTTPS con token con jaso-rc, que publica el control; y jaso-rc habla con el equipo mediante PJLink, SICP, MDC, OSC, RS-232 o DALI.">
-<span class="c1">Tablet</span>  ──HTTP──▶  <span class="c2">jaso-panel</span>  ──HTTPS + token──▶  <span class="c3">jaso-rc</span>  ──PJLink · SICP · MDC · OSC · RS-232 · DALI──▶  Equipo
-<span class="dim">(el panel)</span>       <span class="dim">(diseña, sirve el panel</span>          <span class="dim">(publica el control)</span>
-                  <span class="dim">y guarda el token)</span></pre>
-      <figcaption>
-        <strong>jaso-rc habla con los equipos. jaso-panel es la cara que toca la gente.</strong>
-        Tú no tocas un protocolo, y tampoco un editor de código.
-      </figcaption>
-    </figure>
-  </div>
-</section>
+    <div class="dos-capturas">
+      <figure class="captura"><a href="img/ia-accion.webp" class="ampliar"><img src="img/ia-accion.webp" width="1995" height="1200" loading="lazy" alt="El asistente pide al usuario que arranque el motor y dé un acelerón"></a>
+        <figcaption>El asistente pide una acción y espera a que la hagas.</figcaption></figure>
+      <figure class="captura"><a href="img/ia-diagnostico.webp" class="ampliar"><img src="img/ia-diagnostico.webp" width="1995" height="1200" loading="lazy" alt="Diagnóstico final del asistente con conclusión, causas probables y qué hacer"></a>
+        <figcaption>Cada comprobación queda a la vista (⚙) antes del diagnóstico.</figcaption></figure>
+    </div>
+    <p class="aclaracion">Capturas con el simulador. Las lecturas y la ventana de acción son reales; el texto del diagnóstico es un ejemplo de cómo responde.</p>
 
-<!-- ───────────────────── EL DISEÑADOR ───────────────────── -->
-<section class="section" id="disenador" aria-labelledby="disenador-titulo">
-  <div class="wrap">
-    <h2 id="disenador-titulo">El diseñador de mandos</h2>
-    <p class="section-intro">
-      El mando de la sala se dibuja en el navegador. Es la parte que ve el cliente final, y la que
-      hasta ahora era la más cara de cambiar.
-    </p>
-
-    <div class="feature-grid feature-grid-4">
-      <div class="feature">
-        <h3>Colocas, no programas</h3>
-        <p>Botones, sliders, etiquetas, imágenes e iconos sobre un lienzo, con capas. Varias
-           pestañas por panel —vídeo, audio, luces— si la sala lo pide.</p>
+    <div class="tres">
+      <div class="tarjeta">
+        <h3>Proveedores</h3>
+        <p><strong>Claude</strong> de Anthropic (por defecto), <strong>OpenAI</strong> o <strong>DeepSeek</strong>. El modelo se puede cambiar.</p>
+        <p>Necesitas tu propia clave de API: <a href="https://platform.claude.com/settings/keys">Anthropic</a> · <a href="https://platform.openai.com/api-keys">OpenAI</a> · <a href="https://platform.deepseek.com/api_keys">DeepSeek</a>.</p>
       </div>
-
-      <div class="feature">
-        <h3>Con la cara del cliente</h3>
-        <p>Fondo de color, gradiente o imagen, su logo, y 19 iconos AV incluidos: proyector,
-           pantalla, cámara, micro, HDMI, matriz, luz…</p>
+      <div class="tarjeta">
+        <h3>Coste</h3>
+        <p>Pagas el consumo directamente al proveedor; el programa es gratis. Con Claude, una consulta cuesta céntimos y un diagnóstico guiado de unas 10 comprobaciones, del orden de <strong>0,05 a 0,20 €</strong>.</p>
       </div>
-
-      <div class="feature">
-        <h3>Cualquier cosa es un botón</h3>
-        <p>Un icono, una imagen o un texto pueden llevar una función del equipo. El logo del
-           cliente puede encender el proyector.</p>
-      </div>
-
-      <div class="feature">
-        <h3>Escenas de un toque</h3>
-        <p>«Encender sala» lanza proyector, pantalla, luz y audio en orden, desde el servidor. Si el
-           proyector no contesta, la luz se enciende igual y el panel dice qué falló.</p>
+      <div class="tarjeta">
+        <h3>Privacidad</h3>
+        <p>Al analizar se envían al proveedor que elijas los datos del vehículo (incluido el VIN), las averías, los valores medidos y, si lo pides, el registro del programa. La clave se guarda solo en tu equipo.</p>
       </div>
     </div>
 
-    <!-- Lo nuevo, con su propia caja: es lo que pidió una cámara en obra. -->
-    <div class="split split-feature" id="mando-fisico">
-      <div class="split-copy">
-        <h3>Se maneja como un mando de verdad</h3>
-        <p>
-          Un botón puede hacer una cosa al tocarlo y otra al <strong>mantenerlo pulsado</strong>.
-          Toque: la cámara va al preset 2. Dos segundos: lo guarda. Al cumplirse el tiempo, con el
-          dedo aún puesto, salta el aviso <strong>«Preset 2 guardado»</strong>: sabes cuándo soltar.
-        </p>
-        <p>
-          Y las flechas de una cámara PTZ <strong>mueven mientras las pulsas y paran al
-          soltar</strong>. La orden de parar se manda siempre: aunque el dedo resbale fuera del
-          botón o la tablet apague la pantalla a mitad de movimiento.
-        </p>
-        <p class="fineprint">
-          El tiempo de mantener y el texto del aviso se eligen por botón. Las cámaras se controlan
-          hoy con los comandos que les pongas sobre TCP o UDP genérico; todavía no hay modelos de
-          cámara en el catálogo.
-        </p>
-      </div>
-      <figure class="shot shot-device">
-        <img src="/assets/img/preset-guardado.webp" width="780" height="520" loading="lazy" decoding="async"
-             alt="La tablet tras mantener pulsado «Preset 2» durante dos segundos: un aviso centrado con una marca de verificación dice «Preset 2 guardado».">
-      </figure>
-    </div>
-
-    <div class="feature-grid feature-grid-2">
-      <div class="feature">
-        <h3>El panel no miente</h3>
-        <p>El servidor consulta cada equipo —una sola vez aunque haya veinte tablets mirando— y
-           empuja el cambio a todas. El slider de la luz se coloca en el nivel real, y si alguien lo
-           mueve desde otra tablet, se mueve solo. El equipo que no responde se marca en el panel.</p>
-        <p class="fineprint">
-          El estado se consulta cada pocos segundos (cinco como mínimo), no lo avisa el equipo:
-          refleja la sala de verdad, pero no es instantáneo. Y solo puede reflejar lo que cada
-          driver publica.
-        </p>
-      </div>
-      <div class="feature">
-        <h3>Nadie pisa a nadie</h3>
-        <p>Mientras un equipo ejecuta una orden, su botón se bloquea en todas las tablets, no solo
-           en la que pulsó. Dos personas no lanzan a la vez «encender» y «apagar» sobre el mismo
-           proyector.</p>
-      </div>
-    </div>
-
-    <aside class="pullquote">
-      <h3>No puedes equivocarte de comando</h3>
-      <p>
-        El editor le pregunta al servidor qué equipos hay y qué admite cada uno, y te ofrece
-        <strong>listas cerradas</strong>. Un comando mal tecleado se descubre en la sala, con la
-        reunión empezando. Aquí no llega a existir. Y si un equipo deja de publicar un comando, el
-        botón aparece <strong>marcado como roto</strong> en el editor y en la tablet, en vez de
-        fallar en silencio.
-      </p>
-    </aside>
-  </div>
-</section>
-
-<!-- ─────────────────── EL PANEL QUE SALE ─────────────────── -->
-<section class="section section-alt" id="panel" aria-labelledby="panel-titulo">
-  <div class="wrap">
-    <h2 id="panel-titulo">El panel que sale</h2>
-
-    <div class="feature-grid feature-grid-3">
-      <div class="feature">
-        <h3>Es una web, no una app</h3>
-        <p>Cualquier tablet, PC o móvil con un navegador actual. Nada que instalar, ninguna tienda
-           de aplicaciones de por medio y nada que caduque.</p>
-      </div>
-      <div class="feature">
-        <h3>Cuelga los paneles que quieras</h3>
-        <p>Sin licencia por pantalla, sin hardware homologado, sin contar dispositivos. Cada tablet
-           con su propio emparejamiento, que revocas cuando quieras.</p>
-      </div>
-      <div class="feature">
-        <h3>Viaja dentro del servidor</h3>
-        <p>La interfaz va incluida en el propio programa: no hay ficheros sueltos que se
-           desincronicen ni nada que mantener aparte. Una tablet encendida semanas recoge los
-           cambios sola.</p>
-      </div>
+    <div class="aviso">
+      <strong>Seguridad ante todo.</strong> El asistente prefiere las pruebas en parado, nunca te pide mirar la pantalla conduciendo, solo propone pruebas en marcha con un acompañante que maneje el portátil y avisa de correas, ventilador y piezas calientes. Para borrar averías siempre pide tu permiso.
     </div>
   </div>
 </section>
 
-<!-- ─────────── TU INSTALACIÓN, EN UN FICHERO ─────────── -->
-<section class="section" id="configuracion" aria-labelledby="configuracion-titulo">
-  <div class="wrap">
-    <h2 id="configuracion-titulo">Tu instalación, en un fichero que puedes leer</h2>
-    <p class="section-intro">
-      No hay un programa compilado escondiendo tu sala. Hay un YAML, y se entiende sin que nadie te
-      lo explique.
-    </p>
+<!-- ============ HARDWARE ============ -->
+<section id="hardware" class="seccion">
+  <div class="contenedor">
+    <h2>Qué cable necesitas</h2>
+    <p class="intro">Depende del coche. Si es un VAG anterior a 2004 (sobre todo diésel), casi seguro necesitas el cable KKL: muchos no responden a OBD2 genérico aunque tengan el conector.</p>
 
-    <div class="split">
-      <figure class="code">
-        <figcaption>configs/devices.yaml</figcaption>
-        <pre><code><span class="cm"># Equipos a controlar. Gestionado desde la web de administración.</span>
-<span class="k">devices</span>:
-    - <span class="k">id</span>: proyector-sala1
-      <span class="k">driver</span>: pjlink
-      <span class="k">network</span>:
-        <span class="k">host</span>: <span class="n">192.168.10.50</span>
-        <span class="k">port</span>: <span class="n">4352</span>
-        <span class="k">transport</span>: tcp
-        <span class="k">timeout_ms</span>: <span class="n">2000</span>
-      <span class="k">commands</span>:
-        <span class="k">power_on</span>: <span class="s">POWR 1</span>
-        <span class="k">power_off</span>: <span class="s">POWR 0</span>
-        <span class="k">input_hdmi1</span>: <span class="s">INPT 31</span></code></pre>
-      </figure>
+    <div class="dos">
+      <div class="tarjeta tarjeta-grande">
+        <p class="etiqueta">VAG hasta ~2004 · KW1281</p>
+        <h3>Cable KKL VAG-COM 409.1 con chip FTDI</h3>
+        <p>USB, unos 10-20 €. Conecta a la línea K (pin 7) del conector de diagnóstico.</p>
+        <ul class="lista-ok">
+          <li>Chip <strong>FTDI FT232RL/FT232RQ</strong>. En Windows, el Id. de hardware debe ser <code>VID_0403&amp;PID_6001</code>.</li>
+          <li>Los cables con interruptor de 4 posiciones (Fiat ECU Scan) valen: usa la <strong>posición 1</strong> para VAG.</li>
+        </ul>
+        <ul class="lista-no">
+          <li>Evita los chips <strong>CH340/CH341</strong> (<code>VID_1A86</code>) y <strong>PL2303</strong>: no hacen bien el arranque a 5 baudios.</li>
+          <li>No sirven los ELM327 con interruptor HS-CAN/MS-CAN (son para Ford) ni se recomienda el «K+CAN Commander».</li>
+          <li>Hay FTDI falsos: si el puerto aparece pero no comunica, prueba un driver anterior.</li>
+        </ul>
+      </div>
+      <div class="tarjeta tarjeta-grande">
+        <p class="etiqueta">Cualquier coche con OBD2/EOBD</p>
+        <h3>Adaptador ELM327 (USB o Bluetooth)</h3>
+        <p>Gasolina desde 2001 y diésel desde 2003-2004 en Europa. Los hay por menos de 15 €.</p>
+        <ul class="lista-ok">
+          <li><strong>USB</strong> o <strong>Bluetooth clásico</strong>: se empareja en el sistema y aparece como puerto COM (Windows) o <code>/dev/rfcomm0</code> (Linux).</li>
+          <li>Muchos clones dicen «v2.1» y son v1.0 incompletos; el programa tolera lo que puede.</li>
+        </ul>
+        <ul class="lista-no">
+          <li>Los ELM327 <strong>solo BLE</strong> (algunos para iPhone) no funcionan: no crean puerto serie.</li>
+          <li>El ELM327 no sirve para KW1281: para un VAG antiguo necesitas el cable KKL.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="aclaracion">El conector de diagnóstico suele estar bajo el salpicadero, en el lado del conductor. Una radio no original puede bloquear la línea K: si no conecta, desconéctala para probar.</p>
+  </div>
+</section>
 
-      <div class="split-copy">
-        <p>
-          Lo escribe la web de administración por ti —tú eliges marca y modelo del catálogo—, pero
-          <strong>puedes abrirlo, leerlo, versionarlo y llevártelo</strong>. Dentro de tres años
-          seguirá diciendo qué hay montado en esa sala.
-        </p>
-        <p>
-          Y cuando lo cambias, el servidor <strong>recarga en caliente</strong>: los equipos nuevos
-          quedan publicados sin reiniciar el servicio y sin recompilar nada.
-        </p>
+<!-- ============ DESCARGAR ============ -->
+<section id="descargar" class="seccion seccion-alterna">
+  <div class="contenedor">
+    <h2>Descargar e instalar</h2>
+    <p class="intro" id="version-actual">Gratis y de código abierto. Cada versión está en <a href="https://github.com/jaso69/obd2/releases">GitHub Releases</a>.</p>
 
-        <aside class="pullquote pullquote-inline">
-          <h3>El error dice la verdad</h3>
-          <p>
-            Cuando el proyector no arranca, el panel no dice «error 502». Distingue lo que es un
-            fallo de la sala —<code>El equipo no responde</code>— de lo que es un fallo del diseño
-            —<code>comando no configurado</code>—, y lo dice con esas palabras. Si el fallo es
-            pasajero, ofrece reintentar.
-          </p>
-          <p class="fineprint">
-            La mayoría de los fallos de una sala no son fallos del software: es un proyector apagado
-            desde la pared o un cable suelto. Confundirlos manda al técnico a mirar al sitio
-            equivocado.
-          </p>
-        </aside>
+    <div class="dos">
+      <div class="tarjeta tarjeta-grande">
+        <h3>Windows 10 y 11 (64 bits)</h3>
+        <a class="boton boton-principal" data-descarga="windows" href="https://github.com/jaso69/obd2/releases">⬇ ToledoDiagnosis.exe</a>
+        <ol class="lista-pasos">
+          <li>Descárgalo y ábrelo; no hace falta instalar nada.</li>
+          <li>Windows SmartScreen avisará la primera vez porque no está firmado: <em>Más información → Ejecutar de todas formas</em>.</li>
+          <li><strong>Cable FTDI:</strong> pon la latencia a 1 ms en <em>Administrador de dispositivos → Puertos → USB Serial Port → Propiedades → Configuración de puerto → Opciones avanzadas → Temporizador de latencia</em>. Evita cortes de comunicación.</li>
+        </ol>
+      </div>
+      <div class="tarjeta tarjeta-grande">
+        <h3>Linux (64 bits)</h3>
+        <a class="boton boton-principal" data-descarga="linux" href="https://github.com/jaso69/obd2/releases">⬇ Paquete .tar.gz</a>
+        <p class="pequeno">Ubuntu 20.04+, Debian 11+, Linux Mint 20+, Fedora, openSUSE, Arch…</p>
+<pre><code>tar xzf ToledoDiagnosis-*-linux-x86_64.tar.gz
+cd ToledoDiagnosis
+./instalar.sh
+sudo usermod -aG dialout $USER</code></pre>
+        <ol class="lista-pasos">
+          <li>El instalador lo añade al menú de aplicaciones, sin sudo. <code>./instalar.sh --desinstalar</code> lo quita.</li>
+          <li>Con el último comando das permiso para usar el cable (en Arch el grupo es <code>uucp</code>). Cierra sesión y vuelve a entrar.</li>
+          <li>ELM327 Bluetooth: emparéjalo y enlázalo con <code>sudo rfcomm bind 0 AA:BB:CC:DD:EE:FF</code>.</li>
+        </ol>
+      </div>
+    </div>
+    <p class="aclaracion">¿Prefieres el código? Con Python 3.10+ y tkinter: <code>pip install -r requirements.txt</code> y <code>python gui.py</code>. Instrucciones en el <a href="https://github.com/jaso69/obd2#readme">README</a>.</p>
+  </div>
+</section>
+
+<!-- ============ GUÍA ============ -->
+<section id="guia" class="seccion">
+  <div class="contenedor">
+    <h2>Primeros pasos</h2>
+    <div class="dos">
+      <ol class="pasos pasos-guia">
+        <li><span>1</span><div><h3>Pruébalo sin coche</h3><p>Elige el puerto «Simulador (sin coche)», pulsa <em>Conectar</em> y, en la pestaña Panel, <em>Iniciar lectura</em>.</p></div></li>
+        <li><span>2</span><div><h3>Conecta al coche</h3><p>Contacto puesto (para leer averías basta con el motor parado). Enchufa el cable al conector OBD y al portátil, elige <em>Conexión</em> y <em>Puerto</em> y pulsa <em>Conectar</em>. Con KKL tarda de 2 a 6 s; con ELM327, hasta 25 s.</p></div></li>
+        <li><span>3</span><div><h3>Lee las averías</h3><p>Pestaña <em>Averías → Leer averías</em>. Apúntalas antes de borrar nada.</p></div></li>
+        <li><span>4</span><div><h3>Mira los valores</h3><p><em>Panel</em> para el vistazo rápido; <em>Valores medidos</em> para elegir grupos o PIDs y grabar un CSV.</p></div></li>
+        <li><span>5</span><div><h3>Pide ayuda a la IA</h3><p>En <em>✦ Asistente IA</em>, guarda tu clave, describe el problema y deja que haga las comprobaciones.</p></div></li>
+      </ol>
+      <div>
+        <h3>Grupos útiles en el 1.9 TDI (EDC15)</h3>
+        <table class="tabla">
+          <thead><tr><th>Grupo</th><th>Qué muestra</th></tr></thead>
+          <tbody>
+            <tr><td>001</td><td>Régimen, caudal inyectado (mg/H), tensión del dosificador, temperatura del refrigerante</td></tr>
+            <tr><td>003</td><td>Régimen, masa de aire teórica y real, ciclo de la válvula EGR → caudalímetro y EGR</td></tr>
+            <tr><td>004</td><td>Comienzo de inyección teórico y real (bomba rotativa)</td></tr>
+            <tr><td>008</td><td>Caudal solicitado y limitaciones por régimen y por masa de aire</td></tr>
+            <tr><td>010</td><td>Masa de aire, presión atmosférica, presión del colector, pedal</td></tr>
+            <tr><td>011</td><td>Régimen, presión de turbo teórica y real (mbar), ciclo de la N75 → turbo</td></tr>
+            <tr><td>013</td><td>Marcha suave por cilindro (si lo soporta)</td></tr>
+          </tbody>
+        </table>
+        <p class="aclaracion">Orientativo: los nombres pueden variar según el motor. Las unidades las calcula el programa con la fórmula que envía la propia centralita.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ──────────────────── COMPATIBILIDAD ──────────────────── -->
-<section class="section section-alt" id="compatibilidad" aria-labelledby="compatibilidad-titulo">
-  <div class="wrap">
-    <h2 id="compatibilidad-titulo">Qué controla hoy</h2>
-    <p class="section-intro">
-      Solo lo que existe y está en el código. Ni una casilla de más.
-    </p>
-
-    <div class="table-scroll" tabindex="0" role="region"
-         aria-label="Familias de equipo, driver y qué controla cada uno (tabla desplazable)">
-      <table class="table">
-        <caption class="visually-hidden">Familias de equipo, driver y qué controla cada uno</caption>
-        <thead>
-          <tr><th scope="col">Familia</th><th scope="col">Driver</th><th scope="col">Qué controla</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Proyectores</th>
-            <td><strong>PJLink</strong> Clase 1</td>
-            <td>Cualquier proyector Clase 1 —Epson, NEC, Panasonic, Sony, Christie, Optoma…—
-                con solo dar de alta la IP: encendido, entradas, mutes, lámpara y errores</td>
-          </tr>
-          <tr>
-            <th scope="row">Displays y cartelería</th>
-            <td><strong>Philips SICP</strong> · <strong>Samsung MDC</strong> · <strong>LG</strong> (control externo)</td>
-            <td>Encendido, entradas, volumen y mute, por IP o RS-232</td>
-          </tr>
-          <tr>
-            <th scope="row">Audio: mesas</th>
-            <td><strong>Midas M32 / Behringer X32</strong> (OSC)</td>
-            <td>Faders, mutes, escenas</td>
-          </tr>
-          <tr>
-            <th scope="row">Audio: DSP de sala</th>
-            <td><strong>Biamp Tesira</strong> (TTP) · <strong>QSC Q-SYS</strong> (QRC)</td>
-            <td>Volumen, mute, presets y snapshots — sobre el TCP genérico</td>
-          </tr>
-          <tr>
-            <th scope="row">Matrices</th>
-            <td><strong>Extron SIS</strong> · <strong>Kramer Protocol 3000</strong></td>
-            <td>Ties de vídeo y audio, routing y consultas, por IP o serie</td>
-          </tr>
-          <tr>
-            <th scope="row">Iluminación</th>
-            <td><strong>DALI</strong> vía pasarela</td>
-            <td>Direcciones, grupos, escenas y regulación 0–254</td>
-          </tr>
-          <tr>
-            <th scope="row">Cualquier equipo TCP/UDP</th>
-            <td><strong>TCP / UDP genérico</strong></td>
-            <td>La cadena cruda que el equipo entienda</td>
-          </tr>
-          <tr>
-            <th scope="row">Cualquier equipo serie</th>
-            <td><strong>RS-232</strong></td>
-            <td>Matrices, pantallas motorizadas, relés</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="notes">
-      <p>
-        <strong>Esos son los protocolos, no la lista de equipos.</strong> Los equipos concretos
-        viven en un catálogo — y el catálogo lo amplías tú.
-      </p>
-      <p>
-        <strong>Todo lo que jaso-rc controla, jaso-panel lo dibuja.</strong> El editor no tiene una
-        lista propia de equipos: lee la del servidor.
-      </p>
-      <p class="fineprint">
-        El soporte DALI está verificado de punta a punta contra pasarela simulada, no todavía contra
-        una pasarela física. Lo digo aquí y no en la letra pequeña de un contrato.
-      </p>
-      <p class="fineprint">
-        En Biamp, QSC y las matrices, los comandos del catálogo vienen <strong>preparados, no
-        adivinados</strong>: las etiquetas de control —<code>Level1</code>, <code>MainGain</code>,
-        <code>Sala1</code>— las define el integrador en el proyecto de cada sala, y se ajustan al dar
-        de alta el equipo.
-      </p>
-    </div>
-
-    <!-- El catálogo: tipo → marca → modelo, con CRUD desde /ui/catalog -->
-    <div class="split split-wide catalogo">
-      <div class="split-copy">
-        <h3>El catálogo crece contigo</h3>
-        <p>
-          El servidor trae un catálogo de <strong>tipo → marca → modelo</strong>: hoy,
-          <strong>15 marcas y 28 modelos</strong> en seis categorías —proyectores, displays, pantallas
-          LED, telas de proyección, audio y matrices—. Cuando das de alta un equipo eliges los tres, y
-          el driver, el puerto y los comandos ya vienen puestos: tú solo escribes la IP.
-        </p>
-        <p>
-          ¿Y tu proyector? <strong>Ya es compatible.</strong> Con PJLink Clase 1 basta la IP: no hay
-          que esperar a que alguien añada tu modelo a una lista. Y la sala entera va por el mismo
-          sitio —fuente → matriz → pantalla, con el DSP de audio incluido—, hablando el protocolo
-          nativo de cada fabricante: PJLink, MDC, SICP, TTP, QRC, SIS, Protocol 3000. Sin cajas
-          propietarias.
-        </p>
-        <p>
-          ¿Un equipo raro que no está? <strong>Lo añades tú, desde la misma web</strong>, sin tocar un
-          fichero: creas la marca, creas el modelo, eliges su driver y dejas escritos sus comandos.
-          Y se queda ahí <strong>para todas tus instalaciones</strong> — el trabajo de descifrar un
-          equipo raro se hace una vez, no en cada obra.
-        </p>
-        <p class="fineprint">
-          El matiz honesto: <strong>añadir un modelo es un formulario</strong>, y reutiliza uno de
-          los drivers de arriba. <strong>Añadir un protocolo nuevo</strong> —uno que no sea PJLink,
-          SICP, MDC, OSC, DALI, TCP/UDP o serie— sigue siendo un fichero Go. Pero si el equipo habla
-          TCP, UDP o RS-232, ya se controla hoy con los drivers genéricos.
-        </p>
-      </div>
-
-      <figure class="code">
-        <figcaption>configs/catalog.yaml — lo escribe la web por ti</figcaption>
-        <pre><code><span class="k">categories</span>:
-  - <span class="k">id</span>: proyector
-    <span class="k">brands</span>:
-      - <span class="k">id</span>: nec
-        <span class="k">models</span>:
-          - <span class="k">id</span>: np-pa653u
-            <span class="k">driver</span>: pjlink
-            <span class="k">defaults</span>:
-              <span class="k">port</span>: <span class="n">4352</span>
-              <span class="k">commands</span>:
-                <span class="k">power_on</span>: <span class="s">POWR 1</span>
-                <span class="k">input_hdmi1</span>: <span class="s">INPT 31</span>
-                <span class="k">mute_on</span>: <span class="s">AVMT 31</span>   <span class="cm"># lo tecleas una vez</span></code></pre>
-      </figure>
-    </div>
+<!-- ============ FAQ ============ -->
+<section id="faq" class="seccion seccion-alterna">
+  <div class="contenedor contenedor-estrecho">
+    <h2>Problemas frecuentes</h2>
+    <details><summary>No conecta con el cable KKL («Sin byte de sincronismo 0x55»)</summary>
+      <p>Revisa que el contacto esté puesto y el puerto sea el correcto. Comprueba que el cable lleve chip FTDI y no CH340, que no sea un FTDI falso y, si tiene interruptor, que esté en la posición 1. Una radio no original puede bloquear la línea K: desconéctala para probar.</p></details>
+    <details><summary>Dice «Keywords KWP2000»</summary>
+      <p>La centralita no habla KW1281 sino KWP2000. Prueba con un ELM327 en modo OBD2.</p></details>
+    <details><summary>La sesión KKL se corta</summary>
+      <p>En Windows, pon la latencia del puerto FTDI a 1 ms (ver Descargar). En Linux el programa la ajusta solo.</p></details>
+    <details><summary>ELM327: «el vehículo no responde a OBD2»</summary>
+      <p>Pon el contacto. Si es un VAG anterior a 2004, probablemente no tenga OBD2 genérico: necesitas el cable KKL.</p></details>
+    <details><summary>No encuentro el puerto del ELM327 Bluetooth</summary>
+      <p>En Windows se crean dos puertos COM al emparejarlo: si uno no funciona, prueba el otro. En Linux hay que enlazarlo con <code>sudo rfcomm bind 0 &lt;MAC&gt;</code> y elegir <code>/dev/rfcomm0</code>.</p></details>
+    <details><summary>Linux: «Permission denied» al conectar</summary>
+      <p>Tu usuario debe estar en el grupo del puerto serie: <code>sudo usermod -aG dialout $USER</code> (en Arch, <code>uucp</code>) y volver a iniciar sesión. El propio programa te dice el comando exacto.</p></details>
+    <details><summary>Linux (Ubuntu/Mint): el cable no aparece como /dev/ttyUSB0</summary>
+      <p>El servicio brltty (para líneas braille) se apodera de muchos adaptadores USB-serie. Si no lo usas: <code>sudo apt remove brltty</code>.</p></details>
+    <details><summary>El asistente dice «API key no válida», «sin saldo» o «modelo no encontrado»</summary>
+      <p>Revisa la clave y la facturación en la web del proveedor. Si el modelo no existe, cambia su nombre en la configuración de la IA.</p></details>
+    <details><summary>Windows avisa de que el programa no es seguro</summary>
+      <p>Es SmartScreen: el ejecutable no está firmado digitalmente. Pulsa <em>Más información → Ejecutar de todas formas</em>. El código es público en GitHub.</p></details>
   </div>
 </section>
 
-<!-- ────────────────────── SEGURIDAD ────────────────────── -->
-<section class="section" id="seguridad" aria-labelledby="seguridad-titulo">
-  <div class="wrap">
-    <h2 id="seguridad-titulo">Seguridad</h2>
-    <p class="section-intro">
-      Si has visto instalaciones abiertas de par en par, esta sección es para ti.
-    </p>
-
-    <ul class="cards cards-4" role="list">
-      <li class="card">
-        <h3>Redes permitidas</h3>
-        <p>El control solo acepta peticiones desde la LAN de control. El resto, 403.</p>
-      </li>
-      <li class="card">
-        <h3>Tablets emparejadas</h3>
-        <p>Cada tablet entra con un código de un solo uso y recibe su propia credencial. La revocas
-           sin tocar las demás; si la vuelves a emparejar, la anterior deja de valer.</p>
-      </li>
-      <li class="card">
-        <h3>Login con contraseña</h3>
-        <p>Para las personas que administran, con freno a la fuerza bruta. Y el editor se puede
-           apagar en casa del cliente.</p>
-      </li>
-      <li class="card">
-        <h3>HTTPS en el control</h3>
-        <p>Servido por el propio binario, con certificado incluido. Sin puerto en claro.</p>
-      </li>
+<!-- ============ ESTADO ============ -->
+<section id="estado" class="seccion">
+  <div class="contenedor contenedor-estrecho">
+    <h2>Estado del proyecto</h2>
+    <p>Es una <strong>versión preliminar</strong> hecha por un aficionado, y prefiero decirte claramente en qué punto está:</p>
+    <ul class="lista-ok">
+      <li>Probado a fondo con los simuladores que incluye: cable KKL con centralita EDC15, y ELM327 con un coche OBD2 simulado.</li>
+      <li>El asistente probado con la API real de Claude.</li>
+      <li>Probado en Windows y en Linux (Ubuntu, Debian, Fedora, Arch y openSUSE).</li>
     </ul>
-
-    <div class="split split-even split-3">
-      <aside class="pullquote">
-        <h3>Cada tablet solo toca lo suyo</h3>
-        <p>
-          La tablet del aula 3 no puede apagar el proyector del auditorio, aunque alguien manipule la
-          petición: solo puede pulsar los botones de su propio panel.
-        </p>
-      </aside>
-
-      <aside class="pullquote">
-        <h3>El token nunca llega a la tablet</h3>
-        <p>
-          Una tablet colgada en la pared es un dispositivo público. La llave del control vive en el
-          servidor de paneles, cifrada, y la tablet nunca la ve. Quien la descuelgue no se lleva la
-          instalación.
-        </p>
-      </aside>
-
-      <aside class="pullquote">
-        <h3>La API nunca acepta la cookie de sesión</h3>
-        <p>
-          Si bastara, cualquier página web que visitara el administrador podría apagar un proyector
-          con una etiqueta <code>&lt;img&gt;</code> invisible. Con token, no.
-        </p>
-      </aside>
-    </div>
-
-    <div class="notes notes-warn">
-      <h3>Y lo que no protege, porque lo vas a preguntar</h3>
-      <p>
-        <strong>Una tablet emparejada no pide contraseña, a propósito.</strong> Quien la tenga en la
-        mano puede pulsar sus botones, igual que quien alcanza el mando físico de la pared. Si
-        desaparece, revocas su credencial desde el editor.
-      </p>
-      <p>
-        <strong>El servidor de paneles habla HTTP dentro de la LAN.</strong> Su defensa es la red:
-        una VLAN de control y la lista blanca de IPs. Es una decisión, no un descuido, y prefiero
-        contártela ahora que el día de la puesta en marcha.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ────────────── INSTALACIÓN Y OPERACIÓN ────────────── -->
-<section class="section section-alt" id="instalacion" aria-labelledby="instalacion-titulo">
-  <div class="wrap">
-    <h2 id="instalacion-titulo">Instalación y operación</h2>
-    <p class="section-intro">
-      Escrito para quien va a mantenerlo dentro de tres años.
-    </p>
-
-    <div class="feature-grid feature-grid-4">
-      <div class="feature">
-        <h3>Dos programas y nada más</h3>
-        <p>jaso-rc controla los equipos; jaso-panel sirve el editor y los paneles. Sin Node, sin
-           Docker, sin runtime que actualizar. Dos servicios systemd endurecidos, con instalador
-           idempotente: reinstalar no pisa tu configuración ni tus paneles.</p>
-      </div>
-      <div class="feature">
-        <h3>El editor se puede apagar</h3>
-        <p>Diseñas en la puesta en marcha y, en casa del cliente, el aparato puede servir solo los
-           paneles: ninguna pantalla de login esperando a que alguien la encuentre.</p>
-      </div>
-      <div class="feature">
-        <h3>Todo cabe en dos carpetas</h3>
-        <p>La instalación es YAML legible; los paneles, una base de datos SQLite con sus imágenes.
-           Copia de seguridad, restauración y reset del control desde su propia web. Clonar una
-           instalación en otro edificio es copiar carpetas.</p>
-      </div>
-      <div class="feature">
-        <h3>Un mini-PC con Ubuntu Server</h3>
-        <p>Sin hardware propietario, sin procesador homologado, sin nube. Ni cuentas, ni
-           suscripciones, ni datos saliendo de tu red.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ────────────────────── COMPARATIVA ────────────────────── -->
-<section class="section" id="comparativa" aria-labelledby="comparativa-titulo">
-  <div class="wrap">
-    <h2 id="comparativa-titulo">Frente a un sistema propietario</h2>
-    <p class="section-intro">
-      Solo hechos comprobables. Ni una opinión.
-    </p>
-
-    <div class="table-scroll" tabindex="0" role="region"
-         aria-label="Comparación con un sistema propietario (tabla desplazable)">
-      <table class="table table-compare">
-        <caption class="visually-hidden">Comparación entre un sistema de control AV propietario típico y Jasodev</caption>
-        <thead>
-          <tr>
-            <th scope="col"><span class="visually-hidden">Aspecto</span></th>
-            <th scope="col">Sistema propietario típico</th>
-            <th scope="col" class="col-us">Jasodev</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Añadir un equipo</th>
-            <td>Programar, compilar, subir</td>
-            <td class="col-us">Un formulario web</td>
-          </tr>
-          <tr>
-            <th scope="row">Diseñar el mando</th>
-            <td>Entorno propietario y programación</td>
-            <td class="col-us">Colocar elementos en el navegador</td>
-          </tr>
-          <tr>
-            <th scope="row">Paneles táctiles</th>
-            <td>Hardware propietario, licencia por pantalla</td>
-            <td class="col-us">Cualquier tablet con navegador. Sin licencia</td>
-          </tr>
-          <tr>
-            <th scope="row">Cambios en caliente</th>
-            <td>Reinicio del procesador</td>
-            <td class="col-us">Sin reiniciar</td>
-          </tr>
-          <tr>
-            <th scope="row">Entorno de desarrollo</th>
-            <td>Propietario, con certificación</td>
-            <td class="col-us">Ninguno</td>
-          </tr>
-          <tr>
-            <th scope="row">Configuración</th>
-            <td>Dentro de un programa compilado</td>
-            <td class="col-us">YAML legible y datos en tu máquina</td>
-          </tr>
-          <tr>
-            <th scope="row">Integrar con otro software</th>
-            <td>SDK del fabricante</td>
-            <td class="col-us">API HTTP y JSON</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="fineprint">
-      AMX y Crestron son marcas registradas de sus respectivos propietarios, y no tienen relación
-      con este proyecto. Se nombran solo como referencia de categoría.
-    </p>
-  </div>
-</section>
-
-<!-- ───────────────────────── FAQ ───────────────────────── -->
-<section class="section section-alt" id="faq" aria-labelledby="faq-titulo">
-  <div class="wrap wrap-narrow">
-    <h2 id="faq-titulo">Preguntas que me hacen siempre</h2>
-
-    <!-- El texto de cada respuesta es el mismo que el del JSON-LD de arriba: si cambias uno,
-         cambia el otro (Google descarta los datos estructurados que no se ven en la página). -->
-    <div class="faq">
-      <details>
-        <summary>¿Necesito saber programar?</summary>
-        <p>No. Das de alta el equipo en un formulario y dibujas el mando arrastrando. No hay
-           entorno de desarrollo que instalar ni certificación que sacarse.</p>
-      </details>
-
-      <details>
-        <summary>¿Y si se cae el servidor?</summary>
-        <p>Los dos programas son servicios systemd que rearrancan solos. Y los equipos conservan su
-           estado físico: una sala encendida no se apaga porque el control se reinicie.</p>
-      </details>
-
-      <details>
-        <summary>¿Funciona sin internet?</summary>
-        <p>Sí. Todo funciona en la red local. No hay nube, no hace falta ninguna cuenta y el sistema
-           no envía datos a servidores externos.</p>
-      </details>
-
-      <details>
-        <summary>¿Puedo controlar un equipo que no está en la lista?</summary>
-        <p>Casi siempre sí, y sin esperarme. El catálogo de marcas y modelos lo amplías tú desde la
-           web: creas el modelo, le asignas un driver y escribes sus comandos. Si el equipo habla
-           PJLink, SICP o MDC, hereda el driver nativo; y si no, los drivers genéricos de TCP, UDP y
-           RS-232 mandan la cadena cruda que el equipo entienda. Solo un protocolo verdaderamente
-           nuevo necesita código, y eso es un fichero Go, no un rediseño.</p>
-      </details>
-
-      <details>
-        <summary>¿Puedo grabar los presets de una cámara desde la tablet?</summary>
-        <p>Sí. Un botón puede tener una acción al tocarlo y otra al mantenerlo pulsado: toque para
-           ir al preset, dos segundos para guardarlo. Al cumplirse el tiempo salta un aviso, así
-           sabes cuándo soltar. Las flechas de la cámara mueven mientras las pulsas y paran al
-           soltar.</p>
-      </details>
-
-      <details>
-        <summary>¿Cuántas tablets puedo colgar?</summary>
-        <p>Las que quieras. No se cuentan dispositivos ni se licencian pantallas: cada tablet se
-           empareja con un código y abre su panel en el navegador.</p>
-      </details>
-
-      <details>
-        <summary>¿Qué pasa si se llevan una tablet?</summary>
-        <p>Revocas su credencial desde el editor y deja de valer. La tablet nunca
-           guarda la llave de la instalación: solo puede pulsar los botones de su propio panel.</p>
-      </details>
-
-      <details>
-        <summary>¿Puedo seguir usando mis paneles actuales?</summary>
-        <p>Si saben abrir una URL, sí: los comandos de jaso-rc se ejecutan también por
-           <code>GET</code>.</p>
-      </details>
-
-      <details>
-        <summary>¿Puedo hacerme mi propio panel en vez de usar el editor?</summary>
-        <p>Sí, contra la API HTTP. El editor es la vía cómoda, no una jaula.</p>
-      </details>
-
-      <details>
-        <summary>¿El panel se adapta a cualquier pantalla?</summary>
-        <p>El diseño se dibuja en un lienzo de tamaño fijo y se <em>escala</em> a la pantalla, que
-           no es lo mismo que un diseño web adaptativo. En la práctica, dibujas para el formato de
-           la tablet que vas a colgar.</p>
-      </details>
-
-      <details>
-        <summary>¿Quién es el dueño de la configuración y de los diseños?</summary>
-        <p>Tú. La instalación es un YAML legible y los paneles una base de datos SQLite con sus
-           imágenes, todo en tu máquina. Te lo llevas cuando quieras.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- ──────────────────────── CTA FINAL ──────────────────────── -->
-<section class="section cta-final" id="hablemos" aria-labelledby="hablemos-titulo">
-  <div class="wrap wrap-narrow">
-    <h2 id="hablemos-titulo">Hablemos de tu instalación</h2>
-    <p class="lead">
-      Cuéntame qué sala quieres montar y qué equipos tiene. Te respondo yo, y si encaja te enseño el
-      sistema funcionando de verdad: dando de alta un proyector y dibujando su mando en directo.
-    </p>
-
-    <p class="cta-row">
-      <a class="btn btn-primary" href="mailto:hola@jasodev.es?subject=Demo%20de%20Jasodev&amp;body=Hola%2C%0A%0AQuiero%20montar%3A%20%0AEquipos%20de%20la%20sala%3A%20%0A%0AGracias.">
-        Escríbeme
-      </a>
-      <a class="btn btn-ghost" href="mailto:hola@jasodev.es">hola@jasodev.es</a>
-    </p>
-
-    <p class="fineprint">
-      No hay formulario ni nube: escribes a una persona, y esa persona te contesta.
-    </p>
+    <ul class="lista-no">
+      <li><strong>Todavía no se ha probado con un coche real.</strong> Puede que haya que ajustar tiempos, alguna fórmula o algún texto.</li>
+      <li>La tabla de averías VAG es pequeña: los códigos que no conoce salen con su número.</li>
+      <li>Solo lee y borra averías: no hay adaptaciones, ajustes básicos, codificación ni test de actuadores.</li>
+    </ul>
+    <p>Si lo pruebas en tu coche, cuéntame cómo ha ido en <a href="https://github.com/jaso69/obd2/issues">GitHub Issues</a>.</p>
   </div>
 </section>
 
 </main>
 
-<footer class="site-footer">
-  <div class="wrap footer-row">
-    <p>
-      <strong>Jasodev</strong> — control AV dirigido por configuración.
-      <span class="dim">jaso-rc, el servidor de control. jaso-panel, el diseñador y los paneles.</span>
-    </p>
-    <p><a href="mailto:hola@jasodev.es">hola@jasodev.es</a></p>
+<footer class="pie">
+  <div class="contenedor">
+    <p><strong>Toledo Diagnosis</strong> es software libre bajo <a href="https://github.com/jaso69/obd2/blob/main/LICENSE">licencia MIT</a>. Código en <a href="https://github.com/jaso69/obd2">github.com/jaso69/obd2</a>.</p>
+    <p class="legal">Proyecto independiente, sin relación con SEAT, Volkswagen Group, Bosch, FTDI, Elm Electronics, Anthropic, OpenAI ni DeepSeek. Las marcas pertenecen a sus propietarios. El programa se ofrece tal cual, sin garantía; úsalo bajo tu responsabilidad. No realices pruebas que distraigan de la conducción. Las sugerencias del asistente de IA son orientativas y no sustituyen a un taller.</p>
   </div>
 </footer>
 
-<script src="/assets/js/nav.js" defer></script>
+<dialog id="visor" aria-label="Captura ampliada">
+  <button class="visor-cerrar" aria-label="Cerrar">✕</button>
+  <img src="" alt="">
+</dialog>
+
+<script src="web.js"></script>
 </body>
 </html>
