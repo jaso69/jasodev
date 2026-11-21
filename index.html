@@ -49,7 +49,6 @@
       <a class="boton boton-principal" data-descarga="linux" href="https://github.com/jaso69/obd2/releases">⬇ Descargar para Linux</a>
       <a class="boton boton-secundario" href="https://github.com/jaso69/obd2">Ver en GitHub</a>
     </div>
-    <p class="nota-version" id="nota-version">Versión preliminar: probada a fondo con simuladores, todavía no con un coche real. <a href="#estado">Más detalles</a>.</p>
     <figure class="captura captura-portada">
       <a href="img/panel-kkl.webp" class="ampliar"><img src="img/panel-kkl.webp" width="1995" height="1200"
         alt="Panel del programa conectado a una centralita VAG: relojes de régimen, caudal, turbo y refrigerante, y gráficas de presión de turbo y masa de aire"></a>
@@ -333,14 +332,14 @@ sudo usermod -aG dialout $USER</code></pre>
 <section id="estado" class="seccion">
   <div class="contenedor contenedor-estrecho">
     <h2>Estado del proyecto</h2>
-    <p>Es una <strong>versión preliminar</strong> hecha por un aficionado, y prefiero decirte claramente en qué punto está:</p>
+    <p>Es un proyecto hecho por un aficionado, y prefiero decirte claramente en qué punto está:</p>
     <ul class="lista-ok">
+      <li>Probado en coches reales, funcionando correctamente.</li>
       <li>Probado a fondo con los simuladores que incluye: cable KKL con centralita EDC15, y ELM327 con un coche OBD2 simulado.</li>
       <li>El asistente probado con la API real de Claude.</li>
       <li>Probado en Windows y en Linux (Ubuntu, Debian, Fedora, Arch y openSUSE).</li>
     </ul>
     <ul class="lista-no">
-      <li><strong>Todavía no se ha probado con un coche real.</strong> Puede que haya que ajustar tiempos, alguna fórmula o algún texto.</li>
       <li>La tabla de averías VAG es pequeña: los códigos que no conoce salen con su número.</li>
       <li>Solo lee y borra averías: no hay adaptaciones, ajustes básicos, codificación ni test de actuadores.</li>
     </ul>
