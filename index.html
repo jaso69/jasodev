@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Toledo Diagnosis · Diagnóstico de tu coche desde el portátil</title>
-<meta name="description" content="Programa gratuito para Windows y Linux: lee averías y valores en directo de coches VAG antiguos con cable KKL (KW1281) y de cualquier coche OBD2 con ELM327, con un asistente de IA que hace las comprobaciones por ti.">
-<meta name="keywords" content="diagnosis OBD2 portátil, KW1281, cable KKL 409.1, VAG-COM, EDC15, SEAT Toledo TDI, 1.9 TDI averías, ELM327 Bluetooth, lector OBD2 gratis, diagnóstico con IA, Linux OBD2">
+<meta name="description" content="Programa gratuito para Windows y Linux: lee averías, datos congelados y valores en directo de coches VAG antiguos con cable KKL (KW1281) y de cualquier coche OBD2 con ELM327 (USB, Bluetooth o WiFi), con informe en PDF y un asistente de IA que hace las comprobaciones por ti.">
+<meta name="keywords" content="diagnosis OBD2 portátil, KW1281, cable KKL 409.1, VAG-COM, EDC15, SEAT Toledo TDI, 1.9 TDI averías, ELM327 Bluetooth, ELM327 WiFi, lector OBD2 gratis, datos congelados, monitores readiness ITV, escanear módulos VAG, diagnóstico con IA, Linux OBD2">
 <meta name="theme-color" content="#111418">
 <link rel="icon" type="image/png" href="img/icono.png">
 <meta property="og:type" content="website">
@@ -56,11 +56,11 @@
     <div class="tres">
       <div class="tarjeta">
         <h3>VAG antiguos por KKL</h3>
-        <p>Habla <strong>KW1281</strong>, el protocolo de SEAT, VW, Audi y Skoda hasta ~2004, que un lector OBD2 normal no entiende. Pensado para el 1.9 TDI con EDC15.</p>
+        <p>Habla <strong>KW1281</strong>, el protocolo de SEAT, VW, Audi y Skoda hasta ~2004, que un lector OBD2 normal no entiende. Pensado para el 1.9 TDI con EDC15, y <strong>escanea todos los módulos</strong> (motor, ABS, airbag, cuadro…) de una vez.</p>
       </div>
       <div class="tarjeta">
         <h3>Cualquier OBD2 con ELM327</h3>
-        <p>Con un ELM327 USB o Bluetooth lee averías P0xxx, el testigo MIL, el VIN y decenas de valores de cualquier coche con OBD2/EOBD. Si la búsqueda automática falla, prueba uno a uno los protocolos de línea K (KWP2000 e ISO 9141) de los coches anteriores a CAN.</p>
+        <p>Con un ELM327 USB, Bluetooth o WiFi lee averías P0xxx (también pendientes y permanentes), los <strong>datos congelados</strong>, los monitores para la ITV, el VIN y decenas de valores de cualquier coche con OBD2/EOBD. Si la búsqueda automática falla, prueba uno a uno los protocolos de línea K (KWP2000 e ISO 9141) de los coches anteriores a CAN.</p>
       </div>
       <div class="tarjeta">
         <h3>Un asistente que comprueba</h3>
@@ -99,23 +99,28 @@
     <div class="fila-funcion">
       <div class="texto-funcion">
         <h3>Averías</h3>
-        <p>Códigos VAG de 5 cifras con el componente, el tipo de fallo y si es intermitente. En OBD2, averías memorizadas y pendientes con su descripción y el estado del testigo MIL.</p>
-        <p>Puedes borrarlas (siempre pide confirmación). Recuerda: borrar un código no repara la avería.</p>
+        <p>Códigos VAG de 5 cifras con el componente, el tipo de fallo y si es intermitente; también los 16xxx-18xxx de los VAG con OBD, traducidos a su código P. Con <strong>Escanear todos los módulos</strong> recorre motor, cambio, ABS, airbag, cuadro, confort… y te lista las averías de cada uno.</p>
+        <p>En OBD2, averías memorizadas, pendientes y <strong>permanentes</strong>, el testigo MIL y los <strong>datos congelados</strong>: régimen, temperatura, carga y demás valores del motor en el momento exacto en que saltó la avería.</p>
+        <p>Puedes borrarlas (siempre pide confirmación) y <strong>generar un informe</strong> para imprimir o guardar en PDF, útil para el taller o al vender el coche. Recuerda: borrar un código no repara la avería.</p>
         <div class="selector" role="tablist" data-grupo="averias">
-          <button role="tab" aria-selected="true" data-img="img/averias-kkl.webp" data-alt="Averías VAG 00553 y 01262 intermitente">KKL · VAG</button>
-          <button role="tab" aria-selected="false" data-img="img/averias-obd.webp" data-alt="Averías OBD2 P0171, P0420 y P0301 pendiente con el testigo MIL encendido">ELM327 · OBD2</button>
+          <button role="tab" aria-selected="true" data-img="img/averias-kkl.webp" data-alt="Escaneo de todos los módulos VAG: motor, ABS, airbag y cuadro con sus averías">KKL · VAG</button>
+          <button role="tab" aria-selected="false" data-img="img/averias-obd.webp" data-alt="Averías OBD2 memorizadas, pendiente y permanente, con los datos congelados de la P0171">ELM327 · OBD2</button>
         </div>
       </div>
-      <figure class="captura"><a href="img/averias-kkl.webp" class="ampliar" data-grupo="averias"><img src="img/averias-kkl.webp" width="1995" height="1200" loading="lazy" alt="Averías VAG 00553 y 01262 intermitente"></a></figure>
+      <figure class="captura"><a href="img/averias-kkl.webp" class="ampliar" data-grupo="averias"><img src="img/averias-kkl.webp" width="1995" height="1200" loading="lazy" alt="Escaneo de todos los módulos VAG: motor, ABS, airbag y cuadro con sus averías"></a></figure>
     </div>
 
     <div class="fila-funcion invertida">
       <div class="texto-funcion">
-        <h3>Vehículo y otros módulos</h3>
-        <p>Identificación de la centralita (referencia, software, codificación) o, en OBD2, el VIN, el protocolo, la tensión de batería y el estándar.</p>
-        <p>Con el cable KKL también puedes entrar en otras centralitas: cambio automático, ABS, Climatronic, airbag, cuadro de instrumentos, cierre centralizado y radio.</p>
+        <h3>Vehículo, otros módulos e ITV</h3>
+        <p>Identificación de la centralita (referencia, software, codificación). Con el cable KKL puedes entrar en una veintena de centralitas: cambio, ABS, Climatronic, airbag, cuadro, inmovilizador, confort, radio…</p>
+        <p>En OBD2, el <strong>VIN descifrado</strong> (fabricante, país, año y modelo), la calibración de la centralita, la tensión de batería y los <strong>monitores de preparación</strong>: qué autodiagnósticos de emisiones están completos, lo que miran en la ITV.</p>
+        <div class="selector" role="tablist" data-grupo="vehiculo">
+          <button role="tab" aria-selected="true" data-img="img/vehiculo-kkl.webp" data-alt="Identificación de la centralita del motor">KKL · VAG</button>
+          <button role="tab" aria-selected="false" data-img="img/vehiculo-obd.webp" data-alt="Datos del vehículo OBD2 con el VIN descifrado y los monitores de preparación">ELM327 · OBD2</button>
+        </div>
       </div>
-      <figure class="captura"><a href="img/vehiculo-kkl.webp" class="ampliar"><img src="img/vehiculo-kkl.webp" width="1995" height="1200" loading="lazy" alt="Identificación de la centralita del motor"></a></figure>
+      <figure class="captura"><a href="img/vehiculo-kkl.webp" class="ampliar" data-grupo="vehiculo"><img src="img/vehiculo-kkl.webp" width="1995" height="1200" loading="lazy" alt="Identificación de la centralita del motor"></a></figure>
     </div>
 
     <ul class="extras">
@@ -123,6 +128,8 @@
       <li><strong>Un solo archivo</strong>: no hay que instalar Python ni nada más.</li>
       <li><strong>Registro</strong> de toda la comunicación, con modo de depuración, por si algo falla.</li>
       <li><strong>Sesión estable</strong>: mantiene viva la conexión KW1281 y avisa si se pierde.</li>
+      <li><strong>Informe de diagnóstico</strong> en HTML, listo para imprimir o guardar como PDF.</li>
+      <li><strong>Avisa de versiones nuevas</strong> al arrancar.</li>
     </ul>
   </div>
 </section>
@@ -193,10 +200,11 @@
       </div>
       <div class="tarjeta tarjeta-grande">
         <p class="etiqueta">Cualquier coche con OBD2/EOBD</p>
-        <h3>Adaptador ELM327 (USB o Bluetooth)</h3>
+        <h3>Adaptador ELM327 (USB, Bluetooth o WiFi)</h3>
         <p>Gasolina desde 2001 y diésel desde 2003-2004 en Europa. Los hay por menos de 15 €.</p>
         <ul class="lista-ok">
           <li><strong>USB</strong> o <strong>Bluetooth clásico</strong>: se empareja en el sistema y aparece como puerto COM (Windows) o <code>/dev/rfcomm0</code> (Linux).</li>
+          <li><strong>WiFi</strong>: conecta el portátil a la red WiFi del adaptador y elige el puerto «WiFi · 192.168.0.10:35000» (o escribe su dirección si es otra).</li>
           <li>Muchos clones dicen «v2.1» y son v1.0 incompletos; el programa tolera lo que puede.</li>
         </ul>
         <ul class="lista-no">
@@ -278,7 +286,7 @@ sudo usermod -aG dialout $USER</code></pre>
       <ol class="pasos pasos-guia">
         <li><span>1</span><div><h3>Pruébalo sin coche</h3><p>Elige el puerto «Simulador (sin coche)», pulsa <em>Conectar</em> y, en la pestaña Panel, <em>Iniciar lectura</em>.</p></div></li>
         <li><span>2</span><div><h3>Conecta al coche</h3><p>Contacto puesto (para leer averías basta con el motor parado). Enchufa el cable al conector OBD y al portátil, elige <em>Conexión</em> y <em>Puerto</em> y pulsa <em>Conectar</em> (si es Bluetooth, antes <a href="#bluetooth">empareja y busca su puerto COM</a>). Con KKL tarda de 2 a 6 s; con ELM327, hasta 25 s (hasta un minuto si tiene que probar los protocolos de línea K).</p></div></li>
-        <li><span>3</span><div><h3>Lee las averías</h3><p>Pestaña <em>Averías → Leer averías</em>. Apúntalas antes de borrar nada.</p></div></li>
+        <li><span>3</span><div><h3>Lee las averías</h3><p>Pestaña <em>Averías → Leer averías</em> (en un VAG antiguo, <em>Escanear todos los módulos</em> para revisarlo entero). Guárdalas con <em>Generar informe</em> antes de borrar nada.</p></div></li>
         <li><span>4</span><div><h3>Mira los valores</h3><p><em>Panel</em> para el vistazo rápido; <em>Valores medidos</em> para elegir grupos o PIDs y grabar un CSV.</p></div></li>
         <li><span>5</span><div><h3>Pide ayuda a la IA</h3><p>En <em>✦ Asistente IA</em>, guarda tu clave, describe el problema y deja que haga las comprobaciones.</p></div></li>
       </ol>
@@ -318,6 +326,8 @@ sudo usermod -aG dialout $USER</code></pre>
       <p>Los coches anteriores a CAN (más o menos hasta 2005-2007) hablan OBD2 por la línea K, y con algunos coches y adaptadores la búsqueda automática del ELM327 no encuentra el protocolo. Por eso el programa prueba después KWP2000 (inicio rápido y lento) e ISO 9141 uno a uno, y en el <em>Registro</em> indica cuál ha funcionado. Si tampoco así responde, puede que el coche no cumpla OBD2 aunque tenga el conector (en Europa es obligatorio desde 2001 en gasolina y desde 2004 en diésel; muchos Mercedes anteriores solo responden a las herramientas de la marca) o que el adaptador sea un clon barato que no maneja bien la línea K.</p></details>
     <details><summary>No encuentro el puerto del ELM327 Bluetooth</summary>
       <p>El Bluetooth no se elige directamente: al emparejarlo, el sistema crea un puerto serie y ese es el que se selecciona (<a href="#bluetooth">paso a paso</a>). En Windows se crean dos puertos COM al emparejarlo: si uno no funciona, prueba el otro. En Linux hay que enlazarlo con <code>sudo rfcomm bind 0 &lt;MAC&gt;</code> y elegir <code>/dev/rfcomm0</code>.</p></details>
+    <details><summary>Cómo conecto un ELM327 WiFi</summary>
+      <p>El adaptador crea su propia red WiFi (suele llamarse «WiFi_OBDII», «OBDII» o «V-LINK»). Conecta el portátil a esa red, elige <em>Conexión</em> ELM327 y, en <em>Puerto</em>, «WiFi · 192.168.0.10:35000». Si tu adaptador usa otra dirección (por ejemplo 192.168.1.10), escríbela en el campo Puerto con el formato <code>ip:puerto</code>. Mientras estés conectado a su red no tendrás internet, así que el asistente IA no funcionará a la vez.</p></details>
     <details><summary>Linux: «Permission denied» al conectar</summary>
       <p>Tu usuario debe estar en el grupo del puerto serie: <code>sudo usermod -aG dialout $USER</code> (en Arch, <code>uucp</code>) y volver a iniciar sesión. El propio programa te dice el comando exacto.</p></details>
     <details><summary>Linux (Ubuntu/Mint): el cable no aparece como /dev/ttyUSB0</summary>
@@ -336,12 +346,12 @@ sudo usermod -aG dialout $USER</code></pre>
     <p>Es un proyecto hecho por un aficionado, y prefiero decirte claramente en qué punto está:</p>
     <ul class="lista-ok">
       <li>Probado en coches reales, funcionando correctamente.</li>
-      <li>Probado a fondo con los simuladores que incluye: cable KKL con centralita EDC15, y ELM327 con un coche OBD2 simulado.</li>
+      <li>Probado a fondo con los simuladores que incluye: cable KKL con varias centralitas VAG (motor EDC15, ABS, airbag y cuadro), y ELM327 con un coche OBD2 simulado.</li>
       <li>El asistente probado con la API real de Claude.</li>
       <li>Probado en Windows y en Linux (Ubuntu, Debian, Fedora, Arch y openSUSE).</li>
     </ul>
     <ul class="lista-no">
-      <li>La tabla de averías VAG es pequeña: los códigos que no conoce salen con su número.</li>
+      <li>El escaneo de módulos, los datos congelados, los monitores y la conexión WiFi están probados con los simuladores; aún no en coche ni con un adaptador WiFi real.</li>
       <li>Solo lee y borra averías: no hay adaptaciones, ajustes básicos, codificación ni test de actuadores.</li>
     </ul>
     <p>Si lo pruebas en tu coche, cuéntame cómo ha ido en <a href="https://github.com/jaso69/obd2/issues">GitHub Issues</a>.</p>
