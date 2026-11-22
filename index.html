@@ -60,7 +60,7 @@
       </div>
       <div class="tarjeta">
         <h3>Cualquier OBD2 con ELM327</h3>
-        <p>Con un ELM327 USB o Bluetooth lee averías P0xxx, el testigo MIL, el VIN y decenas de valores de cualquier coche con OBD2/EOBD.</p>
+        <p>Con un ELM327 USB o Bluetooth lee averías P0xxx, el testigo MIL, el VIN y decenas de valores de cualquier coche con OBD2/EOBD. Si la búsqueda automática falla, prueba uno a uno los protocolos de línea K (KWP2000 e ISO 9141) de los coches anteriores a CAN.</p>
       </div>
       <div class="tarjeta">
         <h3>Un asistente que comprueba</h3>
@@ -277,7 +277,7 @@ sudo usermod -aG dialout $USER</code></pre>
     <div class="dos">
       <ol class="pasos pasos-guia">
         <li><span>1</span><div><h3>Pruébalo sin coche</h3><p>Elige el puerto «Simulador (sin coche)», pulsa <em>Conectar</em> y, en la pestaña Panel, <em>Iniciar lectura</em>.</p></div></li>
-        <li><span>2</span><div><h3>Conecta al coche</h3><p>Contacto puesto (para leer averías basta con el motor parado). Enchufa el cable al conector OBD y al portátil, elige <em>Conexión</em> y <em>Puerto</em> y pulsa <em>Conectar</em> (si es Bluetooth, antes <a href="#bluetooth">empareja y busca su puerto COM</a>). Con KKL tarda de 2 a 6 s; con ELM327, hasta 25 s.</p></div></li>
+        <li><span>2</span><div><h3>Conecta al coche</h3><p>Contacto puesto (para leer averías basta con el motor parado). Enchufa el cable al conector OBD y al portátil, elige <em>Conexión</em> y <em>Puerto</em> y pulsa <em>Conectar</em> (si es Bluetooth, antes <a href="#bluetooth">empareja y busca su puerto COM</a>). Con KKL tarda de 2 a 6 s; con ELM327, hasta 25 s (hasta un minuto si tiene que probar los protocolos de línea K).</p></div></li>
         <li><span>3</span><div><h3>Lee las averías</h3><p>Pestaña <em>Averías → Leer averías</em>. Apúntalas antes de borrar nada.</p></div></li>
         <li><span>4</span><div><h3>Mira los valores</h3><p><em>Panel</em> para el vistazo rápido; <em>Valores medidos</em> para elegir grupos o PIDs y grabar un CSV.</p></div></li>
         <li><span>5</span><div><h3>Pide ayuda a la IA</h3><p>En <em>✦ Asistente IA</em>, guarda tu clave, describe el problema y deja que haga las comprobaciones.</p></div></li>
@@ -314,6 +314,8 @@ sudo usermod -aG dialout $USER</code></pre>
       <p>En Windows, pon la latencia del puerto FTDI a 1 ms (ver Descargar). En Linux el programa la ajusta solo.</p></details>
     <details><summary>ELM327: «el vehículo no responde a OBD2»</summary>
       <p>Pon el contacto. Si es un VAG anterior a 2004, probablemente no tenga OBD2 genérico: necesitas el cable KKL.</p></details>
+    <details><summary>ELM327: coche antiguo con conector OBD2 que no conecta (p. ej. Mercedes)</summary>
+      <p>Los coches anteriores a CAN (más o menos hasta 2005-2007) hablan OBD2 por la línea K, y con algunos coches y adaptadores la búsqueda automática del ELM327 no encuentra el protocolo. Por eso el programa prueba después KWP2000 (inicio rápido y lento) e ISO 9141 uno a uno, y en el <em>Registro</em> indica cuál ha funcionado. Si tampoco así responde, puede que el coche no cumpla OBD2 aunque tenga el conector (en Europa es obligatorio desde 2001 en gasolina y desde 2004 en diésel; muchos Mercedes anteriores solo responden a las herramientas de la marca) o que el adaptador sea un clon barato que no maneja bien la línea K.</p></details>
     <details><summary>No encuentro el puerto del ELM327 Bluetooth</summary>
       <p>El Bluetooth no se elige directamente: al emparejarlo, el sistema crea un puerto serie y ese es el que se selecciona (<a href="#bluetooth">paso a paso</a>). En Windows se crean dos puertos COM al emparejarlo: si uno no funciona, prueba el otro. En Linux hay que enlazarlo con <code>sudo rfcomm bind 0 &lt;MAC&gt;</code> y elegir <code>/dev/rfcomm0</code>.</p></details>
     <details><summary>Linux: «Permission denied» al conectar</summary>
