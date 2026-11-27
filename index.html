@@ -205,7 +205,7 @@
         <ul class="lista-ok">
           <li><strong>USB</strong> o <strong>Bluetooth clásico</strong>: se empareja en el sistema y aparece como puerto COM (Windows) o <code>/dev/rfcomm0</code> (Linux).</li>
           <li><strong>WiFi</strong>: conecta el portátil a la red WiFi del adaptador y elige el puerto «WiFi · 192.168.0.10:35000» (o escribe su dirección si es otra).</li>
-          <li>Muchos clones dicen «v2.1» y son v1.0 incompletos; el programa tolera lo que puede.</li>
+          <li>Muchos clones dicen «v2.1» y son v1.0 incompletos; el programa está preparado para trabajar con ellos.</li>
         </ul>
         <ul class="lista-no">
           <li>Los ELM327 <strong>solo BLE</strong> (algunos para iPhone) no funcionan: no crean puerto serie.</li>
@@ -343,18 +343,18 @@ sudo usermod -aG dialout $USER</code></pre>
 <section id="estado" class="seccion">
   <div class="contenedor contenedor-estrecho">
     <h2>Estado del proyecto</h2>
-    <p>Es un proyecto hecho por un aficionado, y prefiero decirte claramente en qué punto está:</p>
+    <p>Toledo Diagnosis está en desarrollo activo. Esto es lo que está verificado y lo que queda por cubrir en la versión actual:</p>
     <ul class="lista-ok">
-      <li>Probado en coches reales, funcionando correctamente, también con las novedades de la v0.3.0 (escaneo de módulos, datos congelados, monitores e informe).</li>
-      <li>Probado a fondo con los simuladores que incluye: cable KKL con varias centralitas VAG (motor EDC15, ABS, airbag y cuadro), y ELM327 con un coche OBD2 simulado.</li>
-      <li>El asistente probado con la API real de Claude.</li>
-      <li>Probado en Windows y en Linux (Ubuntu, Debian, Fedora, Arch y openSUSE).</li>
+      <li>Verificado en coches reales, incluidas las novedades de la v0.3.0 (escaneo de módulos, datos congelados, monitores e informe).</li>
+      <li>Batería de pruebas automáticas con los simuladores integrados: cable KKL con varias centralitas VAG (motor EDC15, ABS, airbag y cuadro), y ELM327 con un coche OBD2 simulado.</li>
+      <li>Asistente IA validado con la API real de Claude.</li>
+      <li>Compatible con Windows 10/11 y Linux (Ubuntu, Debian, Fedora, Arch y openSUSE).</li>
     </ul>
     <ul class="lista-no">
-      <li>La conexión WiFi está probada con el simulador, pero aún no con un adaptador ELM327 WiFi real.</li>
-      <li>Solo lee y borra averías: no hay adaptaciones, ajustes básicos, codificación ni test de actuadores.</li>
+      <li>Conexión WiFi validada con el simulador; pendiente de verificar con un adaptador ELM327 WiFi real.</li>
+      <li>Centrado en el diagnóstico (averías y valores medidos): las adaptaciones, ajustes básicos, codificación y test de actuadores no están incluidos en esta versión.</li>
     </ul>
-    <p>Si lo pruebas en tu coche, cuéntame cómo ha ido en <a href="https://github.com/jaso69/obd2/issues">GitHub Issues</a>.</p>
+    <p>Si lo usas en tu coche, tu experiencia ayuda a mejorarlo: compártela en <a href="https://github.com/jaso69/obd2/issues">GitHub Issues</a>.</p>
   </div>
 </section>
 
